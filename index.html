@@ -113,7 +113,8 @@
     <span class="chip">Today: <strong id="today-label">—</strong></span>
     <span class="chip">Plan day: <strong id="today-day">—</strong></span>
     <span class="chip">Streak: <strong id="streak">0</strong> days</span>
-    <span class="chip">Saved locally in this browser</span>
+    <span class="chip" id="last-saved">Last saved: checking…</span>
+    <span class="chip">Stored permanently in this browser (localStorage)</span>
   </div>
 
   <div class="progress-wrap">
@@ -290,7 +291,26 @@ const PHASES = [
 ];
 
 const LS_KEY = "fde90day-progress-v1";
-let state = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+const LS_BACKUP = "fde90day-progress-v1-backup";
+const LS_META = "fde90day-progress-meta";
+let state = loadState();
+
+function loadState() {
+  for (const key of [LS_KEY, LS_BACKUP]) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object" && Object.keys(parsed).length) return parsed;
+      }
+    } catch (e) { /* corrupted or blocked — try next source */ }
+  }
+  return {};
+}
+function storageOk() {
+  try { localStorage.setItem("__fde_test__", "1"); localStorage.removeItem("__fde_test__"); return true; }
+  catch (e) { return false; }
+}
 
 function fmtDate(d) {
   const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -300,7 +320,21 @@ function fmtDate(d) {
 function dateForDay(n) { const d = new Date(START); d.setDate(d.getDate() + (n - 1)); return d; }
 function isWeekend(n) { const day = dateForDay(n).getDay(); return day === 5 || day === 6; } // Fri/Sat
 
-function save() { localStorage.setItem(LS_KEY, JSON.stringify(state)); refresh(); }
+function save() {
+  const payload = JSON.stringify(state);
+  let ok = true;
+  try {
+    localStorage.setItem(LS_KEY, payload);
+    localStorage.setItem(LS_BACKUP, payload);
+    localStorage.setItem(LS_META, JSON.stringify({ at: Date.now(), count: doneCount() }));
+  } catch (e) { ok = false; }
+  const chip = document.getElementById("last-saved");
+  if (chip) chip.innerHTML = ok
+    ? 'Last saved: <strong>' + new Date().toLocaleTimeString() + '</strong> (this browser, permanent)'
+    : '<strong style="color:var(--red)">Storage blocked — use Export!</strong>';
+  refresh();
+}
+function doneCount() { return Object.values(state).filter(v => v === true).length; }
 
 function buildPlan() {
   const root = document.getElementById("plan");
@@ -347,7 +381,21 @@ function buildPlan() {
 }
 
 function refresh() {
-  const done = Object.values(state).filter(Boolean).length;
+  let meta = null;
+  try { meta = JSON.parse(localStorage.getItem(LS_META) || "null"); } catch (e) {}
+  const chip = document.getElementById("last-saved");
+  if (chip) {
+    if (!storageOk()) {
+      chip.innerHTML = '<strong style="color:var(--red)">Storage blocked — progress won\'t persist. Use Export!</strong>';
+    } else if (meta && meta.at) {
+      chip.innerHTML = 'Last saved: <strong>' + new Date(meta.at).toLocaleString() + '</strong> · ' + (meta.count || 0) + ' days';
+    } else if (doneCount()) {
+      chip.innerHTML = 'Progress loaded: <strong>' + doneCount() + ' days</strong>';
+    } else {
+      chip.innerHTML = 'No progress yet — check a day to save it permanently';
+    }
+  }
+  const done = doneCount();
   const total = DAYS.length;
   document.getElementById("done-count").textContent = done;
   document.getElementById("total-count").textContent = total;
@@ -416,6 +464,8 @@ function importProgress(e) {
     try {
       state = JSON.parse(r.result);
       localStorage.setItem(LS_KEY, JSON.stringify(state));
+      localStorage.setItem(LS_BACKUP, JSON.stringify(state));
+      localStorage.setItem(LS_META, JSON.stringify({ at: Date.now(), count: Object.values(state).filter(v => v === true).length }));
       location.reload();
     } catch { alert("Invalid progress file."); }
   };
@@ -425,6 +475,8 @@ function resetProgress() {
   if (confirm("Reset ALL checked days? Export first if you want a backup.")) {
     state = {};
     localStorage.removeItem(LS_KEY);
+    localStorage.removeItem(LS_BACKUP);
+    localStorage.removeItem(LS_META);
     location.reload();
   }
 }
