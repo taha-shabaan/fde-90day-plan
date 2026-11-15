@@ -45,7 +45,7 @@
   th { color: var(--muted); font-weight: 600; }
   td.num, th.num { text-align: right; white-space: nowrap; }
   td a { color: var(--teal); }
-  h2.sec-title { margin: 40px 0 4px; font-size: 1.15rem; cursor: pointer; display: flex; align-items: baseline; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  h2.sec-title { margin: 40px 0 4px; font-size: 1.15rem; cursor: pointer; display: flex; align-items: baseline; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 8px; scroll-margin-top: 16px; }
   h2.sec-title:hover { border-color: var(--muted); }
   h2.sec-title .chev { color: var(--muted); }
   h2.sec-title .scount { color: var(--muted); font-weight: normal; font-size: 0.8rem; margin-left: auto; }
@@ -315,10 +315,12 @@ function buildPlan() {
     const bar = document.createElement("div");
     bar.className = "sbar";
     bar.innerHTML = '<h3><span>' + sec.name + '</span><span id="sb-' + si + '">0/' + sec.items.length + '</span></h3><div class="bar"><div id="sbar-' + si + '"></div></div>';
+    bar.addEventListener("click", () => scrollToSection(si));
     bars.appendChild(bar);
 
     const h2 = document.createElement("h2");
     h2.className = "sec-title";
+    h2.id = "sec-title-" + si;
     h2.innerHTML = '<span class="chev" id="chev-' + si + '"></span>' + sec.name + '<span class="scount" id="scount-' + si + '"></span>';
     h2.addEventListener("click", () => toggleSection(si));
     root.appendChild(h2);
@@ -410,6 +412,11 @@ function expandAll(open) {
 function togglePanel(id) {
   const p = document.getElementById(id);
   p.style.display = p.style.display === "none" ? "block" : "none";
+}
+function scrollToSection(si) {
+  if (state["_s" + si]) { delete state["_s" + si]; applySection(si, true); }
+  const el = document.getElementById("sec-title-" + si);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function refresh() {
