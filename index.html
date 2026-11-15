@@ -106,6 +106,19 @@
   }
   .note-btn:hover { color: var(--text); border-color: var(--muted); }
   .note-btn.has-note { color: var(--amber); border-color: var(--amber); }
+  .chev { cursor: pointer; user-select: none; color: var(--muted); }
+  .chev:hover { color: var(--text); }
+  h2.phase-title { cursor: pointer; }
+  h2.phase-title:hover { border-color: var(--muted); }
+  .wk-done { color: var(--green); font-size: 0.75rem; font-weight: normal; }
+  .day-detail { display: none; }
+  .day-detail.open { display: block; }
+  .day-toggle {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    font-size: 0.72rem; padding: 2px 10px; border-radius: 999px; margin-left: 8px; cursor: pointer;
+  }
+  .day-toggle:hover { color: var(--text); border-color: var(--muted); }
+  .day-toggle.has-note { color: var(--amber); border-color: var(--amber); }
   .note-box { margin: 8px 0 0 128px; display: none; }
   .note-box.open { display: block; }
   .note-box textarea {
@@ -558,30 +571,55 @@ function buildMonths() {
   });
 }
 
+let WEEK_META = [];
+
+function setChev(el, open) { el.textContent = open ? "\u25BE" : "\u25B8"; }
+
 function buildPlan() {
   const root = document.getElementById("plan");
+  root.innerHTML = "";
+  WEEK_META = [];
   let weekIndex = 0;
-  PHASES.forEach(phase => {
+  PHASES.forEach((phase, pi) => {
     const h2 = document.createElement("h2");
     h2.className = "phase-title";
-    h2.innerHTML = phase.name + ' <span>(Days ' + phase.range[0] + '–' + phase.range[1] + ')</span>';
+    const phaseOpen = !state["_ph" + pi];
+    h2.innerHTML = '<span class="chev" id="ph-chev-' + pi + '">' + (phaseOpen ? "\u25BE" : "\u25B8") + '</span> ' + phase.name + ' <span>(Days ' + phase.range[0] + '\u2013' + phase.range[1] + ')</span>';
+    h2.addEventListener("click", () => togglePhase(pi));
     root.appendChild(h2);
+
+    const phaseBody = document.createElement("div");
+    phaseBody.id = "phase-body-" + pi;
+    phaseBody.style.display = phaseOpen ? "block" : "none";
+    root.appendChild(phaseBody);
 
     phase.weeks.forEach(week => {
       weekIndex++;
-      const mo = weekIndex <= 4 ? 1 : weekIndex <= 8 ? 2 : 3;
+      const wkId = "wk-" + pi + "-" + weekIndex;
       const card = document.createElement("div");
       card.className = "week-card";
-      const m = week.focus.match(/Days (\d+)–(\d+)/);
+      const m = week.focus.match(/Days (\d+)\u2013(\d+)/);
       const a = m ? +m[1] : 0, b = m ? +m[2] : 0;
       let wh = 0;
       for (let n = a; n <= b; n++) if (DAYS[n - 1]) wh += DAYS[n - 1].hrs;
+      const weekOpen = !state["_w" + a];
+      const mo = weekIndex <= 4 ? 1 : weekIndex <= 8 ? 2 : 3;
       const h4 = document.createElement("h4");
-      h4.innerHTML = '<span>' + week.w + '<span class="mbadge">Month ' + mo + '</span></span><span class="whrs">' + wh + 'h this week</span>';
+      h4.innerHTML =
+        '<span><span class="chev" id="' + wkId + '-chev">' + (weekOpen ? "\u25BE" : "\u25B8") + '</span> ' + week.w +
+        '<span class="mbadge">Month ' + mo + '</span></span>' +
+        '<span class="whrs"><span class="wk-done" id="' + wkId + '-done"></span> ' + wh + 'h this week</span>';
+      h4.addEventListener("click", () => toggleWeek(pi, a, wkId));
+      card.appendChild(h4);
       const focus = document.createElement("div");
       focus.className = "week-focus";
       focus.textContent = week.focus;
-      card.appendChild(h4); card.appendChild(focus);
+      card.appendChild(focus);
+
+      const daysWrap = document.createElement("div");
+      daysWrap.className = "week-days";
+      daysWrap.id = wkId + "-days";
+      daysWrap.style.display = weekOpen ? "block" : "none";
 
       for (let n = a; n <= b; n++) {
         const item = DAYS[n - 1];
@@ -597,17 +635,19 @@ function buildPlan() {
         const resHtml = item.res && item.res.length
           ? '<div class="res-list">Resources: ' + item.res.map(r => '<a href="' + r.url + '" target="_blank">' + r.label + '</a>').join("") + '</div>'
           : "";
-        const hasNote = state["note-" + n] ? " has-note" : "";
-        const noteBtn = '<button class="note-btn' + hasNote + '" onclick="toggleNote(' + n + ')">' + (state["note-" + n] ? "note ✓" : "+ note") + '</button>';
-        const noteBox = '<div class="note-box" id="notebox-' + n + '"><textarea placeholder="Your notes for Day ' + n + ' — blockers, wins, ideas, what to revisit…" oninput="saveNote(' + n + ', this.value)">' + esc(state["note-" + n] || "") + '</textarea></div>';
+        const detailOpen = !state["_dd" + n];
+        const hasNote = state["note-" + n];
+        const toggleBtn = '<button class="day-toggle' + (hasNote ? " has-note" : "") + '" id="dtg-' + n + '" onclick="toggleDay(' + n + ')">' + (detailOpen ? "\u25BE" : "\u25B8") + (hasNote ? " \u25CF" : "") + '</button>';
+        const noteBtn = '<button class="note-btn' + (hasNote ? " has-note" : "") + '" onclick="toggleNote(' + n + ')">' + (hasNote ? "note \u2713" : "+ note") + '</button>';
+        const noteBox = '<div class="note-box" id="notebox-' + n + '"><textarea placeholder="Your notes for Day ' + n + ' \u2014 blockers, wins, ideas, what to revisit\u2026" oninput="saveNote(' + n + ', this.value)">' + esc(state["note-" + n] || "") + '</textarea></div>';
 
         row.innerHTML =
           '<div class="day-top">' +
             '<input type="checkbox" data-day="' + n + '" ' + (state[n] === true ? "checked" : "") + '>' +
             '<span class="dlabel">Day ' + n + '<span class="date">' + fmtDate(dt) + '</span></span>' +
             '<div class="dbody">' +
-              '<span class="dtext">' + item.t + tag + hrs + ref + noteBtn + '</span>' +
-              resHtml + noteBox +
+              '<span class="dtext">' + item.t + tag + hrs + ref + toggleBtn + '</span>' +
+              '<div class="day-detail' + (detailOpen ? " open" : "") + '" id="dd-' + n + '">' + resHtml + noteBtn + noteBox + '</div>' +
             '</div>' +
           '</div>';
         row.querySelector("input").addEventListener("change", function () {
@@ -616,14 +656,61 @@ function buildPlan() {
           row.classList.toggle("done", this.checked);
           save();
         });
-        card.appendChild(row);
+        daysWrap.appendChild(row);
       }
-      root.appendChild(card);
+      card.appendChild(daysWrap);
+      WEEK_META.push({ wkId, a, b });
+      phaseBody.appendChild(card);
     });
   });
+  syncCollapse();
   buildMonths();
   buildHoursTable();
   refresh();
+}
+
+function togglePhase(pi) {
+  const open = state["_ph" + pi];
+  if (open) delete state["_ph" + pi]; else state["_ph" + pi] = true;
+  document.getElementById("phase-body-" + pi).style.display = open ? "block" : "none";
+  setChev(document.getElementById("ph-chev-" + pi), !open);
+  save();
+}
+function toggleWeek(pi, a, wkId) {
+  const open = state["_w" + a];
+  if (open) delete state["_w" + a]; else state["_w" + a] = true;
+  document.getElementById(wkId + "-days").style.display = open ? "block" : "none";
+  setChev(document.getElementById(wkId + "-chev"), !open);
+  save();
+}
+function toggleDay(n) {
+  const open = state["_dd" + n];
+  if (open) delete state["_dd" + n]; else state["_dd" + n] = true;
+  document.getElementById("dd-" + n).classList.toggle("open", !open);
+  const b = document.getElementById("dtg-" + n);
+  b.textContent = (!open ? "\u25BE" : "\u25B8") + (state["note-" + n] ? " \u25CF" : "");
+  save();
+}
+function syncCollapse() {
+  PHASES.forEach((phase, pi) => {
+    const body = document.getElementById("phase-body-" + pi);
+    const chev = document.getElementById("ph-chev-" + pi);
+    if (body && chev) { body.style.display = state["_ph" + pi] ? "none" : "block"; setChev(chev, !state["_ph" + pi]); }
+  });
+  WEEK_META.forEach(w => {
+    const days = document.getElementById(w.wkId + "-days");
+    const chev = document.getElementById(w.wkId + "-chev");
+    if (days && chev) { days.style.display = state["_w" + w.a] ? "none" : "block"; setChev(chev, !state["_w" + w.a]); }
+  });
+  DAYS.forEach(it => {
+    const dd = document.getElementById("dd-" + it.d);
+    const btn = document.getElementById("dtg-" + it.d);
+    if (dd && btn) {
+      const open = !state["_dd" + it.d];
+      dd.classList.toggle("open", open);
+      btn.textContent = (open ? "\u25BE" : "\u25B8") + (state["note-" + it.d] ? " \u25CF" : "");
+    }
+  });
 }
 
 function toggleNote(n) {
@@ -719,6 +806,12 @@ function refresh() {
     if (bar) bar.style.width = (done / n * 100) + "%";
     if (stat) stat.textContent = done + "/" + n + " days · " + doneH + "/" + Math.round(DAYS.slice(mo.range[0] - 1, mo.range[1]).reduce((s, it) => s + it.hrs, 0)) + "h";
   });
+  WEEK_META.forEach(w => {
+    let c = 0;
+    for (let n = w.a; n <= w.b; n++) if (state[n] === true) c++;
+    const el = document.getElementById(w.wkId + "-done");
+    if (el) el.textContent = c + "/" + (w.b - w.a + 1);
+  });
 
   const now = new Date(); now.setHours(0,0,0,0);
   const todayN = Math.floor((now - START) / 86400000) + 1;
@@ -739,6 +832,13 @@ function scrollToToday() {
   const now = new Date(); now.setHours(0,0,0,0);
   const todayN = Math.floor((now - START) / 86400000) + 1;
   const target = (todayN >= 1 && todayN <= 90) ? todayN : 1;
+  // expand any collapsed phase/week containing the target day
+  PHASES.forEach((phase, pi) => {
+    if (target >= phase.range[0] && target <= phase.range[1] && state["_ph" + pi]) togglePhase(pi);
+  });
+  WEEK_META.forEach(w => {
+    if (target >= w.a && target <= w.b && state["_w" + w.a]) toggleWeek(0, w.a, w.wkId);
+  });
   const el = document.getElementById("day-" + target);
   if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
 }
