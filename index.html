@@ -88,6 +88,30 @@
     <span class="chip">Hours: <strong id="hours-done">0</strong>/<strong id="hours-total">0</strong>h</span>
     <span class="chip">Streak area: <strong id="streak">0</strong> topics in a row</span>
     <span class="chip" id="last-saved">Last saved: checking…</span>
+    <span class="chip" id="profile-chip" style="cursor:pointer" onclick="togglePanel('profile-panel')">Tracking as: …</span>
+  </div>
+
+  <div class="panel" id="profile-panel" style="display:none">
+    <h3>Profiles — each one has its own separate tracking</h3>
+    <table>
+      <tr><th>Switch profile</th><td>
+        <select id="profile-select" style="background:#0d1117;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:0.85rem"></select>
+        <button onclick="switchProfile(document.getElementById('profile-select').value)">Switch</button>
+      </td></tr>
+      <tr><th>New profile</th><td>
+        <input id="new-profile-name" placeholder="Name or leave blank for anonymous Guest-####" style="background:#0d1117;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:0.85rem;width:280px">
+        <button onclick="addProfile()">Create &amp; switch</button>
+      </td></tr>
+      <tr><th>Rename current</th><td>
+        <input id="rename-profile-name" placeholder="New name" style="background:#0d1117;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:0.85rem;width:280px">
+        <button onclick="renameProfile()">Rename</button>
+      </td></tr>
+      <tr><th>Delete profile</th><td><button onclick="deleteProfile()" style="border-color:var(--red);color:var(--red)">Delete selected profile</button></td></tr>
+    </table>
+    <p style="color:var(--muted); font-size:0.8rem; margin-top:10px">
+      Each profile keeps its own progress, notes and streak, stored separately in this browser — nothing is sent anywhere (fully anonymous).
+      Share the site URL with friends: each person's browser tracks them independently. Same device, multiple people → create a profile per person and switch.
+    </p>
   </div>
 
   <div class="poster">
@@ -266,10 +290,57 @@ const SECTIONS = [
 const LS_KEY = "fde-roadmap-study-v1";
 const LS_BACKUP = "fde-roadmap-study-v1-backup";
 const LS_META = "fde-roadmap-study-meta";
+const LS_PROFILES = "fde-profiles";
+const LS_ACTIVE = "fde-active-profile";
+const OLD_KEY = "fde-roadmap-study-v1";
+const OLD_BACKUP = "fde-roadmap-study-v1-backup";
+const OLD_META = "fde-roadmap-study-meta";
+
+function getProfiles() {
+  try { return JSON.parse(localStorage.getItem(LS_PROFILES) || "[]"); } catch (e) { return []; }
+}
+function setProfiles(list) { localStorage.setItem(LS_PROFILES, JSON.stringify(list)); }
+function getActive() { return localStorage.getItem(LS_ACTIVE); }
+function setActive(name) { localStorage.setItem(LS_ACTIVE, name); }
+function pkey(base, p) { return base + "::" + p; }
+
+function ensureProfiles() {
+  let profiles = getProfiles();
+  if (profiles.length) {
+    if (!getActive() || profiles.indexOf(getActive()) === -1) setActive(profiles[0]);
+    return;
+  }
+  // first run on this browser: migrate any pre-profile progress into a named profile
+  let name = null;
+  for (const k of [OLD_KEY, OLD_BACKUP]) {
+    const raw = localStorage.getItem(k);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object" && Object.keys(parsed).length) { name = "My progress"; break; }
+      } catch (e) {}
+    }
+  }
+  if (!name) name = "Guest";
+  profiles = [name];
+  setProfiles(profiles);
+  setActive(name);
+  if (name === "My progress") {
+    localStorage.setItem(pkey(LS_KEY, name), localStorage.getItem(OLD_KEY) || localStorage.getItem(OLD_BACKUP) || "{}");
+    localStorage.setItem(pkey(LS_BACKUP, name), localStorage.getItem(OLD_BACKUP) || "{}");
+    const om = localStorage.getItem(OLD_META);
+    if (om) localStorage.setItem(pkey(LS_META, name), om);
+    localStorage.removeItem(OLD_KEY);
+    localStorage.removeItem(OLD_BACKUP);
+    localStorage.removeItem(OLD_META);
+  }
+}
+
+let PROFILE = (ensureProfiles(), getActive());
 let state = loadState();
 
 function loadState() {
-  for (const key of [LS_KEY, LS_BACKUP]) {
+  for (const key of [pkey(LS_KEY, PROFILE), pkey(LS_BACKUP, PROFILE)]) {
     try {
       const raw = localStorage.getItem(key);
       if (raw) {
@@ -288,15 +359,68 @@ function save() {
   let ok = true;
   try {
     const payload = JSON.stringify(state);
-    localStorage.setItem(LS_KEY, payload);
-    localStorage.setItem(LS_BACKUP, payload);
-    localStorage.setItem(LS_META, JSON.stringify({ at: Date.now(), count: doneCount() }));
+    localStorage.setItem(pkey(LS_KEY, PROFILE), payload);
+    localStorage.setItem(pkey(LS_BACKUP, PROFILE), payload);
+    localStorage.setItem(pkey(LS_META, PROFILE), JSON.stringify({ at: Date.now(), count: doneCount() }));
   } catch (e) { ok = false; }
   const chip = document.getElementById("last-saved");
   if (chip) chip.innerHTML = ok
     ? 'Last saved: <strong>' + new Date().toLocaleTimeString() + '</strong> (this browser, permanent)'
     : '<strong style="color:var(--red)">Storage blocked — use Export!</strong>';
   refresh();
+}
+
+function switchProfile(name) {
+  if (!getProfiles().includes(name)) return;
+  setActive(name);
+  location.reload();
+}
+function addProfile() {
+  const inp = document.getElementById("new-profile-name");
+  let name = (inp.value || "").trim();
+  if (!name) name = "Guest-" + String(Math.floor(1000 + Math.random() * 9000));
+  const profiles = getProfiles();
+  if (profiles.includes(name)) { alert("That profile name already exists."); return; }
+  profiles.push(name);
+  setProfiles(profiles);
+  setActive(name);
+  location.reload();
+}
+function renameProfile() {
+  const sel = document.getElementById("profile-select");
+  const inp = document.getElementById("rename-profile-name");
+  const oldName = sel.value, newName = (inp.value || "").trim();
+  if (!newName) { alert("Enter a new name first."); return; }
+  const profiles = getProfiles();
+  if (profiles.includes(newName)) { alert("That profile name already exists."); return; }
+  for (const base of [LS_KEY, LS_BACKUP, LS_META]) {
+    const v = localStorage.getItem(pkey(base, oldName));
+    if (v !== null) { localStorage.setItem(pkey(base, newName), v); localStorage.removeItem(pkey(base, oldName)); }
+  }
+  setProfiles(profiles.map(p => p === oldName ? newName : p));
+  if (getActive() === oldName) setActive(newName);
+  location.reload();
+}
+function deleteProfile() {
+  const sel = document.getElementById("profile-select");
+  const name = sel.value;
+  const profiles = getProfiles();
+  if (profiles.length <= 1) { alert("You need at least one profile."); return; }
+  if (!confirm('Delete profile "' + name + '" with ALL its progress and notes? This cannot be undone.')) return;
+  for (const base of [LS_KEY, LS_BACKUP, LS_META]) localStorage.removeItem(pkey(base, name));
+  const remaining = profiles.filter(p => p !== name);
+  setProfiles(remaining);
+  if (getActive() === name) setActive(remaining[0]);
+  location.reload();
+}
+function refreshProfileUI() {
+  const chip = document.getElementById("profile-chip");
+  if (chip) chip.innerHTML = 'Tracking as: <strong>' + PROFILE + "</strong> ▾";
+  const sel = document.getElementById("profile-select");
+  if (sel) {
+    const profiles = getProfiles();
+    sel.innerHTML = profiles.map(p => '<option value="' + p + '"' + (p === PROFILE ? " selected" : "") + ">" + p + "</option>").join("");
+  }
 }
 function doneCount() { let c = 0; SECTIONS.forEach(s => s.items.forEach(it => { if (state[it.slug] === true) c++; })); return c; }
 function doneHours() { let h = 0; SECTIONS.forEach(s => s.items.forEach(it => { if (state[it.slug] === true) h += it.hrs; })); return h; }
@@ -421,7 +545,7 @@ function scrollToSection(si) {
 
 function refresh() {
   let meta = null;
-  try { meta = JSON.parse(localStorage.getItem(LS_META) || "null"); } catch (e) {}
+  try { meta = JSON.parse(localStorage.getItem(pkey(LS_META, PROFILE)) || "null"); } catch (e) {}
   const chip = document.getElementById("last-saved");
   if (chip) {
     if (!storageOk()) chip.innerHTML = '<strong style="color:var(--red)">Storage blocked — use Export!</strong>';
@@ -455,7 +579,7 @@ function exportProgress() {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "fde-roadmap-progress-" + new Date().toISOString().slice(0, 10) + ".json";
+  a.download = "fde-roadmap-progress-" + PROFILE.replace(/[^a-z0-9_-]/gi, "_") + "-" + new Date().toISOString().slice(0, 10) + ".json";
   a.click();
 }
 function importProgress(e) {
@@ -465,25 +589,26 @@ function importProgress(e) {
   r.onload = () => {
     try {
       state = JSON.parse(r.result);
-      localStorage.setItem(LS_KEY, JSON.stringify(state));
-      localStorage.setItem(LS_BACKUP, JSON.stringify(state));
-      localStorage.setItem(LS_META, JSON.stringify({ at: Date.now(), count: doneCount() }));
+      localStorage.setItem(pkey(LS_KEY, PROFILE), JSON.stringify(state));
+      localStorage.setItem(pkey(LS_BACKUP, PROFILE), JSON.stringify(state));
+      localStorage.setItem(pkey(LS_META, PROFILE), JSON.stringify({ at: Date.now(), count: doneCount() }));
       location.reload();
     } catch { alert("Invalid progress file."); }
   };
   r.readAsText(f);
 }
 function resetProgress() {
-  if (confirm("Reset ALL checked topics AND notes? Export first if you want a backup.")) {
+  if (confirm("Reset ALL checked topics AND notes for profile \"" + PROFILE + "\"? Export first if you want a backup.")) {
     state = {};
-    localStorage.removeItem(LS_KEY);
-    localStorage.removeItem(LS_BACKUP);
-    localStorage.removeItem(LS_META);
+    localStorage.removeItem(pkey(LS_KEY, PROFILE));
+    localStorage.removeItem(pkey(LS_BACKUP, PROFILE));
+    localStorage.removeItem(pkey(LS_META, PROFILE));
     location.reload();
   }
 }
 
 buildPlan();
+refreshProfileUI();
 </script>
 </body>
 </html>
