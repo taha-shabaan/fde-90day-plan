@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>90-Day AI Engineer / FDE Learning Plan — Taha Shabaan</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #4f8cff;
+    --green: #3fb950;
+    --amber: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    padding-bottom: 60px;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+  header { text-align: center; padding: 32px 0 8px; }
+  header h1 { font-size: 1.7rem; margin-bottom: 6px; }
+  header p { color: var(--muted); }
+  .meta-bar {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    margin: 18px 0;
+  }
+  .chip {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 999px; padding: 6px 14px; font-size: 0.85rem; color: var(--muted);
+  }
+  .chip strong { color: var(--text); }
+  .progress-wrap {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px; margin: 12px 0 28px;
+  }
+  .progress-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; }
+  .progress-row b { color: var(--green); }
+  .bar { height: 10px; background: #21262d; border-radius: 999px; overflow: hidden; }
+  .bar > div { height: 100%; background: linear-gradient(90deg, var(--accent), var(--green)); width: 0%; transition: width .4s ease; }
+  .phases { display: grid; gap: 12px; margin-bottom: 24px; }
+  .phase {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 16px;
+  }
+  .phase h3 { font-size: 0.95rem; display: flex; justify-content: space-between; }
+  .phase .bar { margin-top: 8px; height: 6px; }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 32px; }
+  button {
+    background: #21262d; color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 14px; font-size: 0.85rem; cursor: pointer;
+  }
+  button:hover { background: #30363d; }
+  button.today-btn { background: var(--accent); border-color: var(--accent); color: #fff; }
+  h2.phase-title {
+    margin: 40px 0 14px; font-size: 1.15rem;
+    border-bottom: 1px solid var(--border); padding-bottom: 8px;
+  }
+  h2.phase-title span { color: var(--muted); font-weight: normal; font-size: 0.85rem; }
+  .week-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px; margin-bottom: 14px;
+  }
+  .week-card h4 { font-size: 1rem; margin-bottom: 4px; }
+  .week-card .week-focus { color: var(--muted); font-size: 0.85rem; margin-bottom: 12px; }
+  .day {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 8px 10px; border-radius: 8px; cursor: pointer;
+  }
+  .day:hover { background: #21262d; }
+  .day.is-today { background: rgba(79,140,255,.12); outline: 1px solid rgba(79,140,255,.5); }
+  .day input { margin-top: 4px; accent-color: var(--green); width: 16px; height: 16px; cursor: pointer; }
+  .day .dlabel { font-weight: 600; font-size: 0.9rem; min-width: 118px; }
+  .day .dlabel .date { color: var(--muted); font-weight: normal; font-size: 0.78rem; display: block; }
+  .day .dtext { font-size: 0.9rem; }
+  .day.done .dtext, .day.done .dlabel { text-decoration: line-through; opacity: .55; }
+  .tag {
+    display: inline-block; font-size: 0.68rem; padding: 1px 7px; border-radius: 999px;
+    vertical-align: middle; margin-left: 6px; border: 1px solid;
+  }
+  .tag.checkpoint { color: var(--amber); border-color: var(--amber); }
+  .tag.publish { color: var(--purple); border-color: var(--purple); }
+  .tag.gate { color: var(--red); border-color: var(--red); }
+  .legend { text-align: center; color: var(--muted); font-size: 0.8rem; margin: 10px 0 30px; }
+  footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 40px; }
+  footer a { color: var(--accent); }
+  .rules {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px; margin-bottom: 30px; font-size: 0.9rem;
+  }
+  .rules h4 { margin-bottom: 8px; }
+  .rules ul { padding-left: 20px; color: var(--muted); }
+  .rules li { margin-bottom: 4px; }
+  .rules li strong { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>90-Day AI Engineer / FDE Learning Plan</h1>
+    <p>Applied AI Engineer target — Saudi + remote market · 4 focused hours/day · Day 1 = Sun 8 Nov 2026</p>
+  </header>
+
+  <div class="meta-bar">
+    <span class="chip">Today: <strong id="today-label">—</strong></span>
+    <span class="chip">Plan day: <strong id="today-day">—</strong></span>
+    <span class="chip">Streak: <strong id="streak">0</strong> days</span>
+    <span class="chip">Saved locally in this browser</span>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-row">
+      <span>Overall progress</span>
+      <span><b id="done-count">0</b> / <span id="total-count">90</span> days done (<span id="pct">0</span>%)</span>
+    </div>
+    <div class="bar"><div id="overall-bar"></div></div>
+    <div class="phases" style="margin:14px 0 0;">
+      <div class="phase">
+        <h3><span>Phase 1 — Fundamentals rebuild (Days 1–30)</span><span id="p1-label">0/30</span></h3>
+        <div class="bar"><div id="p1-bar"></div></div>
+      </div>
+      <div class="phase">
+        <h3><span>Phase 2 — Applied AI Engineering (Days 31–60)</span><span id="p2-label">0/30</span></h3>
+        <div class="bar"><div id="p2-bar"></div></div>
+      </div>
+      <div class="phase">
+        <h3><span>Phase 3 — Production + FDE + Applications (Days 61–90)</span><span id="p3-label">0/30</span></h3>
+        <div class="bar"><div id="p3-bar"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="today-btn" onclick="scrollToToday()">Jump to today</button>
+    <button onclick="exportProgress()">Export progress</button>
+    <button onclick="document.getElementById('importFile').click()">Import progress</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importProgress(event)">
+    <button onclick="resetProgress()">Reset all</button>
+  </div>
+
+  <div class="rules">
+    <h4>The rules</h4>
+    <ul>
+      <li><strong>4 focused hours/day</strong> — morning = course/input, afternoon = build/output. Friday = rest + self-review checkpoint. Saturday = light/buffer day.</li>
+      <li><strong>Friday checkpoint</strong>: written update, DataCamp progress check, plan adjustment. Record a 2–3 min spoken-English drill once per checkpoint.</li>
+      <li><strong>Defensible-claim audit</strong>: anything you can't explain in an interview gets flagged for study or removed from the CV.</li>
+      <li><strong>Proof-of-work for everything</strong>: every week produces a public artifact (notebook, repo, app, or document).</li>
+      <li><strong>Missing a day?</strong> Don't delete it — note why. Slippage is data, not failure.</li>
+    </ul>
+  </div>
+
+  <div class="legend">
+    <span class="tag checkpoint">checkpoint</span>
+    <span class="tag publish">publish artifact</span>
+    <span class="tag gate">gate day</span>
+  </div>
+
+  <div id="plan"></div>
+
+  <footer>
+    Built from <a href="https://github.com/taha-shabaan/getJob_3-6_month_saudi_ai_fwd">getJob_3-6_month_saudi_ai_fwd</a> · progress is stored in your browser's localStorage · export regularly to back it up.
+  </footer>
+</div>
+
+<script>
+const START = new Date(2026, 10, 8); // Sun 8 Nov 2026
+const DAYS = [
+  // Phase 1
+  {d:1, t:"Set up repo, AI vs ML vs DL landscape overview; install NumPy/Pandas/Jupyter"},
+  {d:2, t:"NumPy fundamentals: arrays, dtypes, broadcasting, vectorization"},
+  {d:3, t:"NumPy practice: matrix ops, dot products, normalization"},
+  {d:4, t:"Pandas fundamentals: Series, DataFrames, indexing, filtering"},
+  {d:5, t:"Pandas practice: groupby, joins, missing data, cleaning"},
+  {d:6, t:"Checkpoint 1 + start data analysis project on a real public dataset", tag:"checkpoint"},
+  {d:7, t:"Publish data analysis notebook to public GitHub repo; write one-page README", tag:"publish"},
+  {d:8, t:"Vectors & dot products → code: cosine similarity in NumPy"},
+  {d:9, t:"Matrices & projections → code: how embeddings multiply"},
+  {d:10, t:"Probability: distributions, expectation → code: sampling + temperature connection"},
+  {d:11, t:"Statistics: mean/variance/correlation → code on Week 1 dataset"},
+  {d:12, t:"Supervised learning: train/test, overfitting → scikit-learn first model"},
+  {d:13, t:"Checkpoint 2 + unsupervised: k-means/PCA → code", tag:"checkpoint"},
+  {d:14, t:"Publish ML basics notebook; every math topic has its code example", tag:"publish"},
+  {d:15, t:"Perceptron → activation functions → code in NumPy"},
+  {d:16, t:"Backpropagation intuition → code tiny network, watch gradients"},
+  {d:17, t:"Loss & optimizers → code: SGD vs momentum on toy problem"},
+  {d:18, t:"Word embeddings: word2vec idea → vector arithmetic (king − man + woman)"},
+  {d:19, t:"Attention mechanism → annotated attention diagram + code"},
+  {d:20, t:"Checkpoint 3 + transformer architecture: tokens, layers, heads", tag:"checkpoint"},
+  {d:21, t:"Write/publish 'how an LLM works' breakdown (tiny transformer or annotated walkthrough)", tag:"publish"},
+  {d:22, t:"Gemini API: messages, tokens, context windows; API key setup"},
+  {d:23, t:"Temperature & sampling → experiment notebook comparing outputs"},
+  {d:24, t:"System prompts vs user instructions → experiment"},
+  {d:25, t:"Function calling → code a tool the model can call"},
+  {d:26, t:"Structured outputs (JSON mode / schemas) → code"},
+  {d:27, t:"Checkpoint 4 + context management: history, truncation", tag:"checkpoint"},
+  {d:28, t:"Build a small Gemini application (tool calling + structured output), publish", tag:"publish"},
+  {d:29, t:"Phase 1 buffer/revision day 1"},
+  {d:30, t:"Phase 1 buffer/revision day 2 + Day-30 gate check: LinkedIn refreshed + 5–10 Saudi-tech networking approaches", tag:"gate"},
+  // Phase 2
+  {d:31, t:"Embedding models: dimensions, similarity; embed text with Gemini; pgvector docs study"},
+  {d:32, t:"PostgreSQL + pgvector setup; store & query vectors"},
+  {d:33, t:"Semantic search prototype over chosen Saudi public business corpus"},
+  {d:34, t:"Evaluate search quality manually; note failure cases"},
+  {d:35, t:"Checkpoint 5 + publish search prototype notes", tag:"checkpoint"},
+  {d:36, t:"RAG architecture: chunking strategies study"},
+  {d:37, t:"Document loader for Saudi corpus"},
+  {d:38, t:"Implement chunk → embed → store pipeline (part 1)"},
+  {d:39, t:"Implement chunk → embed → store pipeline (part 2)"},
+  {d:40, t:"Retriever + answer-with-citations flow (part 1)"},
+  {d:41, t:"Retriever + answer-with-citations flow (part 2)"},
+  {d:42, t:"Checkpoint 6 + reranking study & integrate simple reranker", tag:"checkpoint"},
+  {d:43, t:"LangGraph fundamentals: nodes, edges"},
+  {d:44, t:"LangGraph fundamentals: state"},
+  {d:45, t:"Tool-calling agent loop"},
+  {d:46, t:"Read-only SQL tool (Saudi retail ERP schema set up)"},
+  {d:47, t:"Planning & multi-step execution (revenue/inventory/receivables queries, part 1)"},
+  {d:48, t:"Planning & multi-step execution (part 2)"},
+  {d:49, t:"Checkpoint 7 + demo: business question → agent → SQL → report", tag:"checkpoint"},
+  {d:50, t:"MCP integration: server"},
+  {d:51, t:"MCP integration: tools"},
+  {d:52, t:"Query validation + read-only enforcement"},
+  {d:53, t:"Permissions model"},
+  {d:54, t:"Human approval workflow for sensitive operations (part 1)"},
+  {d:55, t:"Human approval workflow (part 2)"},
+  {d:56, t:"FastAPI wrapper for Project 2"},
+  {d:57, t:"Dockerize Project 2"},
+  {d:58, t:"Deploy Project 2 demo (HF Spaces)"},
+  {d:59, t:"Day 60 gate: Project 1 public URL + upload + retrieval + citations + README finalized", tag:"gate"},
+  {d:60, t:"Checkpoint 8 — FIRST APPLICATIONS SENT; polish write-ups for both projects", tag:"checkpoint"},
+  // Phase 3
+  {d:61, t:"RAG evaluation: retrieval metrics"},
+  {d:62, t:"RAG evaluation: answer grading"},
+  {d:63, t:"Security: prompt injection"},
+  {d:64, t:"Security: auth basics; latency & cost optimization"},
+  {d:65, t:"Write AI architecture document for Project 1 (draft)"},
+  {d:66, t:"Publish AI architecture document for Project 1", tag:"publish"},
+  {d:67, t:"Checkpoint 9 + OpenAI API parity pass (function calling, structured outputs)", tag:"checkpoint"},
+  {d:68, t:"Harden Project 2: observability/logging"},
+  {d:69, t:"Harden Project 2: error handling"},
+  {d:70, t:"Harden Project 2: cost controls → deployed gate", tag:"gate"},
+  {d:71, t:"Deployment polish both projects (part 1)"},
+  {d:72, t:"Deployment polish both projects (part 2)"},
+  {d:73, t:"Docs for both projects"},
+  {d:74, t:"Checkpoint 10 + system design interview self-prep starts", tag:"checkpoint"},
+  {d:75, t:"Project 3: invent client brief (Saudi mid-size business)"},
+  {d:76, t:"Project 3: discovery questions"},
+  {d:77, t:"Project 3: requirements"},
+  {d:78, t:"Project 3: solution architecture document"},
+  {d:79, t:"Publish engagement document", tag:"publish"},
+  {d:80, t:"Rehearse talking through the engagement document"},
+  {d:81, t:"Checkpoint 11 + mock interview answers (recorded)", tag:"checkpoint"},
+  {d:82, t:"CV final pass — defensible claims only (part 1)"},
+  {d:83, t:"CV final pass — defensible claims only (part 2)"},
+  {d:84, t:"Portfolio page assembled"},
+  {d:85, t:"Application volume (calibration learnings applied, part 1)"},
+  {d:86, t:"Applications + interview prep drills"},
+  {d:87, t:"Interview prep drills"},
+  {d:88, t:"Interview prep drills + application follow-ups"},
+  {d:89, t:"Closing written review: what proved, what slipped"},
+  {d:90, t:"Checkpoint 13 — final gate review + checkpoint log completed", tag:"checkpoint"}
+];
+
+const PHASES = [
+  {name:"Phase 1 — Fundamentals rebuild", range:[1,30], weeks:[
+    {w:"Week 1", focus:"AI landscape + Python data stack (Days 1–7)"},
+    {w:"Week 2", focus:"Math for intuition + classical ML (Days 8–14)"},
+    {w:"Week 3", focus:"Neural networks & transformers (Days 15–21)"},
+    {w:"Week 4", focus:"LLM APIs (Days 22–30)"}
+  ]},
+  {name:"Phase 2 — Applied AI Engineering", range:[31,60], weeks:[
+    {w:"Week 5", focus:"Embeddings & semantic search (Days 29–35)"},
+    {w:"Week 6", focus:"Project 1 — RAG core (Days 36–42)"},
+    {w:"Week 7", focus:"Project 2 — Agent core (Days 43–49)"},
+    {w:"Week 8", focus:"Project 2 — Hardening + Day 60 gate (Days 50–60)"}
+  ]},
+  {name:"Phase 3 — Production + FDE + Applications", range:[61,90], weeks:[
+    {w:"Week 9", focus:"System design, evaluation, security (Days 61–67)"},
+    {w:"Week 10", focus:"Production hardening (Days 68–74)"},
+    {w:"Week 11", focus:"Project 3 — FDE engagement document (Days 75–81)"},
+    {w:"Week 12–13", focus:"Portfolio + applications (Days 82–90)"}
+  ]}
+];
+
+const LS_KEY = "fde90day-progress-v1";
+let state = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+
+function fmtDate(d) {
+  const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return days[d.getDay()] + " " + months[d.getMonth()] + " " + d.getDate();
+}
+function dateForDay(n) { const d = new Date(START); d.setDate(d.getDate() + (n - 1)); return d; }
+function isWeekend(n) { const day = dateForDay(n).getDay(); return day === 5 || day === 6; } // Fri/Sat
+
+function save() { localStorage.setItem(LS_KEY, JSON.stringify(state)); refresh(); }
+
+function buildPlan() {
+  const root = document.getElementById("plan");
+  PHASES.forEach(phase => {
+    const h2 = document.createElement("h2");
+    h2.className = "phase-title";
+    h2.innerHTML = phase.name + ' <span>(Days ' + phase.range[0] + '–' + phase.range[1] + ')</span>';
+    root.appendChild(h2);
+
+    phase.weeks.forEach(week => {
+      const card = document.createElement("div");
+      card.className = "week-card";
+      const h4 = document.createElement("h4");
+      h4.textContent = week.w;
+      const focus = document.createElement("div");
+      focus.className = "week-focus";
+      focus.textContent = week.focus;
+      card.appendChild(h4); card.appendChild(focus);
+
+      const [a, b] = week.focus.match(/Days (\d+)–(\d+)/) ? week.focus.match(/Days (\d+)–(\d+)/).slice(1).map(Number) : [0, 0];
+      for (let n = a; n <= b; n++) {
+        const item = DAYS[n - 1];
+        if (!item) continue;
+        const dt = dateForDay(n);
+        const row = document.createElement("label");
+        row.className = "day";
+        row.id = "day-" + n;
+        const dlabel = '<span class="dlabel">Day ' + n + '<span class="date">' + fmtDate(dt) + (isWeekend(n) ? " · " + (dt.getDay() === 5 ? "checkpoint day" : "light day") : "") + '</span></span>';
+        const tag = item.tag ? '<span class="tag ' + item.tag + '">' + item.tag + '</span>' : "";
+        row.innerHTML = '<input type="checkbox" data-day="' + n + '" ' + (state[n] ? "checked" : "") + '>' +
+                        dlabel + '<span class="dtext">' + item.t + tag + '</span>';
+        row.querySelector("input").addEventListener("change", function () {
+          state[n] = this.checked;
+          if (!this.checked) delete state[n];
+          row.classList.toggle("done", this.checked);
+          save();
+        });
+        card.appendChild(row);
+      }
+      root.appendChild(card);
+    });
+  });
+  refresh();
+}
+
+function refresh() {
+  const done = Object.values(state).filter(Boolean).length;
+  const total = DAYS.length;
+  document.getElementById("done-count").textContent = done;
+  document.getElementById("total-count").textContent = total;
+  const pct = Math.round(done / total * 100);
+  document.getElementById("pct").textContent = pct;
+  document.getElementById("overall-bar").style.width = pct + "%";
+  PHASES.forEach((p, i) => {
+    const [a, b] = p.range;
+    let c = 0;
+    for (let n = a; n <= b; n++) if (state[n]) c++;
+    document.getElementById("p" + (i + 1) + "-label").textContent = c + "/" + (b - a + 1);
+    document.getElementById("p" + (i + 1) + "-bar").style.width = (c / (b - a + 1) * 100) + "%";
+  });
+  // streak: consecutive done days ending at latest done day
+  let streak = 0;
+  for (let n = total; n >= 1; n--) {
+    if (state[n]) streak++;
+    else if (streak > 0 || Object.keys(state).length) {
+      // only count if this is the last done day going backwards
+      if (streak > 0) break;
+    }
+  }
+  // simpler: count backwards from the highest done day
+  streak = 0;
+  let highest = 0;
+  for (let n = 1; n <= total; n++) if (state[n]) highest = n;
+  for (let n = highest; n >= 1; n--) { if (state[n]) streak++; else break; }
+  document.getElementById("streak").textContent = streak;
+
+  // today highlight
+  const now = new Date(); now.setHours(0,0,0,0);
+  const todayN = Math.floor((now - START) / 86400000) + 1;
+  if (todayN >= 1 && todayN <= total) {
+    document.getElementById("today-label").textContent = fmtDate(now);
+    document.getElementById("today-day").textContent = "Day " + todayN + " of 90";
+    DAYS.forEach(it => {
+      const el = document.getElementById("day-" + it.d);
+      if (el) { el.classList.toggle("is-today", it.d === todayN); el.classList.toggle("done", !!state[it.d]); }
+    });
+  } else {
+    document.getElementById("today-label").textContent = fmtDate(now);
+    document.getElementById("today-day").textContent = todayN > 90 ? "Plan complete ✓" : "Before start";
+  }
+}
+
+function scrollToToday() {
+  const now = new Date(); now.setHours(0,0,0,0);
+  const todayN = Math.floor((now - START) / 86400000) + 1;
+  const target = (todayN >= 1 && todayN <= 90) ? todayN : 1;
+  const el = document.getElementById("day-" + target);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function exportProgress() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "fde-90day-progress-" + new Date().toISOString().slice(0, 10) + ".json";
+  a.click();
+}
+function importProgress(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      state = JSON.parse(r.result);
+      localStorage.setItem(LS_KEY, JSON.stringify(state));
+      location.reload();
+    } catch { alert("Invalid progress file."); }
+  };
+  r.readAsText(f);
+}
+function resetProgress() {
+  if (confirm("Reset ALL checked days? Export first if you want a backup.")) {
+    state = {};
+    localStorage.removeItem(LS_KEY);
+    location.reload();
+  }
+}
+
+buildPlan();
+</script>
+</body>
+</html>
