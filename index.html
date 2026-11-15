@@ -16,6 +16,7 @@
     --amber: #d29922;
     --red: #f85149;
     --purple: #bc8cff;
+    --teal: #39c5cf;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -25,14 +26,11 @@
     line-height: 1.5;
     padding-bottom: 60px;
   }
-  .container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+  .container { max-width: 920px; margin: 0 auto; padding: 24px 16px; }
   header { text-align: center; padding: 32px 0 8px; }
   header h1 { font-size: 1.7rem; margin-bottom: 6px; }
   header p { color: var(--muted); }
-  .meta-bar {
-    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
-    margin: 18px 0;
-  }
+  .meta-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 18px 0; }
   .chip {
     background: var(--card); border: 1px solid var(--border);
     border-radius: 999px; padding: 6px 14px; font-size: 0.85rem; color: var(--muted);
@@ -40,73 +38,106 @@
   .chip strong { color: var(--text); }
   .progress-wrap {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 16px; margin: 12px 0 28px;
+    border-radius: 12px; padding: 16px; margin: 12px 0 20px;
   }
   .progress-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; }
   .progress-row b { color: var(--green); }
   .bar { height: 10px; background: #21262d; border-radius: 999px; overflow: hidden; }
   .bar > div { height: 100%; background: linear-gradient(90deg, var(--accent), var(--green)); width: 0%; transition: width .4s ease; }
-  .phases { display: grid; gap: 12px; margin-bottom: 24px; }
+  .phases { display: grid; gap: 12px; margin: 14px 0 0; }
   .phase {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 12px 16px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px;
   }
   .phase h3 { font-size: 0.95rem; display: flex; justify-content: space-between; }
   .phase .bar { margin-top: 8px; height: 6px; }
-  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 32px; }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 28px; }
   button {
     background: #21262d; color: var(--text); border: 1px solid var(--border);
     border-radius: 8px; padding: 8px 14px; font-size: 0.85rem; cursor: pointer;
   }
   button:hover { background: #30363d; }
   button.today-btn { background: var(--accent); border-color: var(--accent); color: #fff; }
-  h2.phase-title {
-    margin: 40px 0 14px; font-size: 1.15rem;
-    border-bottom: 1px solid var(--border); padding-bottom: 8px;
-  }
-  h2.phase-title span { color: var(--muted); font-weight: normal; font-size: 0.85rem; }
-  .week-card {
+  .panel {
     background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 16px; margin-bottom: 14px;
+    padding: 16px; margin-bottom: 20px;
   }
-  .week-card h4 { font-size: 1rem; margin-bottom: 4px; }
-  .week-card .week-focus { color: var(--muted); font-size: 0.85rem; margin-bottom: 12px; }
-  .day {
-    display: flex; gap: 10px; align-items: flex-start;
-    padding: 8px 10px; border-radius: 8px; cursor: pointer;
-  }
-  .day:hover { background: #21262d; }
-  .day.is-today { background: rgba(79,140,255,.12); outline: 1px solid rgba(79,140,255,.5); }
-  .day input { margin-top: 4px; accent-color: var(--green); width: 16px; height: 16px; cursor: pointer; }
-  .day .dlabel { font-weight: 600; font-size: 0.9rem; min-width: 118px; }
-  .day .dlabel .date { color: var(--muted); font-weight: normal; font-size: 0.78rem; display: block; }
-  .day .dtext { font-size: 0.9rem; }
-  .day.done .dtext, .day.done .dlabel { text-decoration: line-through; opacity: .55; }
-  .tag {
-    display: inline-block; font-size: 0.68rem; padding: 1px 7px; border-radius: 999px;
-    vertical-align: middle; margin-left: 6px; border: 1px solid;
-  }
-  .tag.checkpoint { color: var(--amber); border-color: var(--amber); }
-  .tag.publish { color: var(--purple); border-color: var(--purple); }
-  .tag.gate { color: var(--red); border-color: var(--red); }
-  .legend { text-align: center; color: var(--muted); font-size: 0.8rem; margin: 10px 0 30px; }
-  footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 40px; }
-  footer a { color: var(--accent); }
-  .rules {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 16px; margin-bottom: 30px; font-size: 0.9rem;
-  }
+  .panel h3 { margin-bottom: 10px; font-size: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  td a { color: var(--accent); }
+  .rules { padding: 16px; margin-bottom: 20px; font-size: 0.9rem; }
   .rules h4 { margin-bottom: 8px; }
   .rules ul { padding-left: 20px; color: var(--muted); }
   .rules li { margin-bottom: 4px; }
   .rules li strong { color: var(--text); }
+  .gap { color: var(--red); font-weight: 600; }
+  .ok { color: var(--green); font-weight: 600; }
+  h2.phase-title { margin: 40px 0 14px; font-size: 1.15rem; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  h2.phase-title span { color: var(--muted); font-weight: normal; font-size: 0.85rem; }
+  .week-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+  .week-card h4 { font-size: 1rem; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline; }
+  .week-card h4 .whrs { color: var(--teal); font-size: 0.8rem; font-weight: normal; }
+  .week-card .week-focus { color: var(--muted); font-size: 0.85rem; margin-bottom: 12px; }
+  .day { padding: 10px 10px; border-radius: 8px; border-top: 1px solid #21262d; }
+  .day:first-of-type { border-top: none; }
+  .day.is-today { background: rgba(79,140,255,.12); outline: 1px solid rgba(79,140,255,.5); }
+  .day-top { display: flex; gap: 10px; align-items: flex-start; }
+  .day input[type=checkbox] { margin-top: 4px; accent-color: var(--green); width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; }
+  .day .dlabel { font-weight: 600; font-size: 0.9rem; min-width: 118px; }
+  .day .dlabel .date { color: var(--muted); font-weight: normal; font-size: 0.78rem; display: block; }
+  .day .dtext { font-size: 0.9rem; }
+  .day .dbody { flex: 1; min-width: 0; }
+  .day.done .dtext, .day.done .dlabel { text-decoration: line-through; opacity: .55; }
+  .tag { display: inline-block; font-size: 0.68rem; padding: 1px 7px; border-radius: 999px; vertical-align: middle; margin-left: 6px; border: 1px solid; }
+  .tag.checkpoint { color: var(--amber); border-color: var(--amber); }
+  .tag.publish { color: var(--purple); border-color: var(--purple); }
+  .tag.gate { color: var(--red); border-color: var(--red); }
+  .hrs { display: inline-block; font-size: 0.68rem; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--teal); color: var(--teal); vertical-align: middle; margin-left: 6px; }
+  .topic-link { display: inline-block; font-size: 0.68rem; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--muted); color: var(--muted); vertical-align: middle; margin-left: 6px; text-decoration: none; }
+  .topic-link:hover { color: var(--text); border-color: var(--text); }
+  .res-list { margin: 6px 0 0 128px; font-size: 0.78rem; color: var(--muted); }
+  .res-list a { color: var(--teal); margin-right: 10px; text-decoration: none; }
+  .res-list a:hover { text-decoration: underline; }
+  .note-btn {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    font-size: 0.72rem; padding: 2px 10px; border-radius: 999px; margin-left: 8px; cursor: pointer;
+  }
+  .note-btn:hover { color: var(--text); border-color: var(--muted); }
+  .note-btn.has-note { color: var(--amber); border-color: var(--amber); }
+  .note-box { margin: 8px 0 0 128px; display: none; }
+  .note-box.open { display: block; }
+  .note-box textarea {
+    width: 100%; min-height: 60px; background: #0d1117; color: var(--text);
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px; font-size: 0.82rem;
+    font-family: inherit; resize: vertical;
+  }
+  .note-box textarea:focus { outline: none; border-color: var(--accent); }
+  .legend { text-align: center; color: var(--muted); font-size: 0.8rem; margin: 10px 0 30px; }
+  .month-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .month-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  .month-card h5 { font-size: 0.95rem; margin-bottom: 2px; display: flex; justify-content: space-between; }
+  .month-card h5 .mhrs { color: var(--teal); font-size: 0.75rem; font-weight: normal; }
+  .month-card .mdates { color: var(--muted); font-size: 0.75rem; margin-bottom: 6px; }
+  .month-card .mgoal { font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; }
+  .month-card .mout { font-size: 0.78rem; margin-bottom: 8px; color: var(--text); }
+  .month-card .bar { height: 6px; }
+  .month-card .mstat { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+  .mbadge { display: inline-block; font-size: 0.68rem; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--accent); color: var(--accent); vertical-align: middle; margin-left: 6px; }
+  footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 40px; }
+  footer a { color: var(--accent); }
+  @media (max-width: 640px) {
+    .res-list, .note-box { margin-left: 0; }
+    .day .dlabel { min-width: 90px; }
+  }
 </style>
 </head>
 <body>
 <div class="container">
   <header>
     <h1>90-Day AI Engineer / FDE Learning Plan</h1>
-    <p>Applied AI Engineer target — Saudi + remote market · 4 focused hours/day · Day 1 = Sun 8 Nov 2026</p>
+    <p>Applied AI Engineer → Forward-Deployed Engineer · Saudi + remote market · 4 focused hours/day · Day 1 = Sun 8 Nov 2026</p>
   </header>
 
   <div class="meta-bar">
@@ -114,16 +145,15 @@
     <span class="chip">Plan day: <strong id="today-day">—</strong></span>
     <span class="chip">Streak: <strong id="streak">0</strong> days</span>
     <span class="chip" id="last-saved">Last saved: checking…</span>
-    <span class="chip">Stored permanently in this browser (localStorage)</span>
   </div>
 
   <div class="progress-wrap">
     <div class="progress-row">
       <span>Overall progress</span>
-      <span><b id="done-count">0</b> / <span id="total-count">90</span> days done (<span id="pct">0</span>%)</span>
+      <span><b id="done-count">0</b> / <span id="total-count">90</span> days done (<span id="pct">0</span>%) · <span id="hours-done">0</span>/<span id="hours-total">0</span> study hours</span>
     </div>
     <div class="bar"><div id="overall-bar"></div></div>
-    <div class="phases" style="margin:14px 0 0;">
+    <div class="phases">
       <div class="phase">
         <h3><span>Phase 1 — Fundamentals rebuild (Days 1–30)</span><span id="p1-label">0/30</span></h3>
         <div class="bar"><div id="p1-bar"></div></div>
@@ -139,22 +169,61 @@
     </div>
   </div>
 
+  <div class="panel" id="months-panel">
+    <h3>General plan → 3 months</h3>
+    <div class="month-grid" id="month-grid"></div>
+  </div>
+
   <div class="btn-row">
     <button class="today-btn" onclick="scrollToToday()">Jump to today</button>
+    <button onclick="togglePanel('hours-panel')">Hours per topic</button>
+    <button onclick="togglePanel('fde-panel')">FDE roadmap alignment</button>
     <button onclick="exportProgress()">Export progress</button>
     <button onclick="document.getElementById('importFile').click()">Import progress</button>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="importProgress(event)">
     <button onclick="resetProgress()">Reset all</button>
   </div>
 
+  <div class="panel" id="hours-panel" style="display:none">
+    <h3>Study hours per topic (planned vs done)</h3>
+    <table id="hours-table">
+      <thead><tr><th>Topic</th><th>Days</th><th class="num">Planned</th><th class="num">Done</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p style="color:var(--muted); font-size:0.78rem; margin-top:8px">
+      Budget: ~4h/day × 90 days = ~360h. Checkpoint Fridays are 3h (rest + self-review), buffer days lighter.
+    </p>
+  </div>
+
+  <div class="panel" id="fde-panel" style="display:none">
+    <h3>FDE Roadmap alignment (roadmap.sh — see <code>forward-deployed-engineer.pdf</code>)</h3>
+    <table>
+      <thead><tr><th>Pillar</th><th>Covered by</th><th class="num">Hours</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>AI Engineering Skills</td><td>Weeks 1–10 (entire plan: LLM APIs, RAG, agents, MCP, evals, LLMOps)</td><td class="num">~200h</td><td class="ok">Core ✓</td></tr>
+        <tr><td>Backend Skills</td><td>FastAPI wrapper + deploy (D56–58), PostgreSQL/pgvector (D32), auth (D64)</td><td class="num">~24h</td><td class="ok">Enough for FDE demos ✓</td></tr>
+        <tr><td>DevOps Skills</td><td>Docker from day one (D57), HF Spaces deploys (D58, D70), GitHub workflows</td><td class="num">~12h</td><td class="ok">Deployment basics ✓</td></tr>
+        <tr><td>Linux Skills</td><td>Daily terminal work, SSH, servers, Docker host (implicit throughout)</td><td class="num">implicit</td><td class="ok">Ongoing ✓</td></tr>
+        <tr><td>Customer Delivery &amp; Field Skills</td><td>Project 3 FDE engagement doc (D75–81), write-ups, spoken drills every Friday</td><td class="num">~24h</td><td class="ok">FDE story ✓</td></tr>
+        <tr><td>Frontend Skills</td><td>Gradio/Streamlit demos on HF Spaces (D28, D33, D58)</td><td class="num">~6h</td><td>Light — enough for demos</td></tr>
+        <tr><td>DSA &amp; System Design</td><td>System design: D74+ prep. <span class="gap">DSA: NOT in plan — gap!</span></td><td class="num">~8h</td><td class="gap">Add DSA drills (below)</td></tr>
+      </tbody>
+    </table>
+    <ul style="padding-left:20px; color:var(--muted); font-size:0.85rem; margin-top:10px">
+      <li><strong class="gap">DSA is the first interview gate per the roadmap</strong> — "you won't get to show your AI skills if you don't pass this round." Recommendation: add <strong>45 min of DSA on Saturdays</strong> (days 7, 14, 21…) using <a href="https://neetcode.io/roadmap" style="color:var(--teal)">NeetCode 150 roadmap</a> — arrays/strings/two-pointers first. ~6h by Day 90; expand to 1h/day after Day 90 if targeting FDE.</li>
+      <li>System Design: <a href="https://github.com/donnemartin/system-design-primer" style="color:var(--teal)">System Design Primer</a> from Day 74.</li>
+      <li>Full roadmap: <a href="https://roadmap.sh" style="color:var(--teal)">roadmap.sh</a> (FDE + AI Engineer roadmaps).</li>
+    </ul>
+  </div>
+
   <div class="rules">
     <h4>The rules</h4>
     <ul>
-      <li><strong>4 focused hours/day</strong> — morning = course/input, afternoon = build/output. Friday = rest + self-review checkpoint. Saturday = light/buffer day.</li>
-      <li><strong>Friday checkpoint</strong>: written update, DataCamp progress check, plan adjustment. Record a 2–3 min spoken-English drill once per checkpoint.</li>
+      <li><strong>4 focused hours/day</strong> — morning = course/input (CS329Z lectures + DataCamp), afternoon = build/output. Friday = rest + checkpoint, Saturday = light/publish day.</li>
+      <li><strong>Friday checkpoint</strong>: written update in TRACKER.md, DataCamp progress check, plan adjustment. Record a 2–3 min spoken-English drill once per checkpoint.</li>
       <li><strong>Defensible-claim audit</strong>: anything you can't explain in an interview gets flagged for study or removed from the CV.</li>
-      <li><strong>Proof-of-work for everything</strong>: every week produces a public artifact (notebook, repo, app, or document).</li>
-      <li><strong>Missing a day?</strong> Don't delete it — note why. Slippage is data, not failure.</li>
+      <li><strong>Proof-of-work for everything</strong>: every week produces a public artifact. Lecture notes go in <code>notes/cs329z/lectureNN.md</code> (linked per day below).</li>
+      <li><strong>Notes below each day are saved permanently</strong> in this browser. Use Export for backup and moving between devices.</li>
     </ul>
   </div>
 
@@ -162,111 +231,219 @@
     <span class="tag checkpoint">checkpoint</span>
     <span class="tag publish">publish artifact</span>
     <span class="tag gate">gate day</span>
+    <span class="hrs">hours</span>
+    <span class="topic-link">repo topic ref</span>
   </div>
 
   <div id="plan"></div>
 
   <footer>
-    Built from <a href="https://github.com/taha-shabaan/getJob_3-6_month_saudi_ai_fwd">getJob_3-6_month_saudi_ai_fwd</a> · progress is stored in your browser's localStorage · export regularly to back it up.
+    Built from <a href="https://github.com/taha-shabaan/getJob_3-6_month_saudi_ai_fwd">getJob_3-6_month_saudi_ai_fwd</a> (PLAN.md · TRACKER.md · CS329Z-STUDY-PLAN.md · GLOSSARY.md) · progress stored permanently in your browser's localStorage · export regularly to back it up.
   </footer>
 </div>
 
 <script>
 const START = new Date(2026, 10, 8); // Sun 8 Nov 2026
+const REPO = "https://github.com/taha-shabaan/getJob_3-6_month_saudi_ai_fwd/blob/main/";
+const R = (label, url) => ({ label, url });
+const CS = (n) => R("CS329Z L" + n + " slides", "https://web.stanford.edu/class/cs329z/slides/lecture" + String(n).padStart(2, "0") + ".pdf");
+
 const DAYS = [
-  // Phase 1
-  {d:1, t:"Set up repo, AI vs ML vs DL landscape overview; install NumPy/Pandas/Jupyter"},
-  {d:2, t:"NumPy fundamentals: arrays, dtypes, broadcasting, vectorization"},
-  {d:3, t:"NumPy practice: matrix ops, dot products, normalization"},
-  {d:4, t:"Pandas fundamentals: Series, DataFrames, indexing, filtering"},
-  {d:5, t:"Pandas practice: groupby, joins, missing data, cleaning"},
-  {d:6, t:"Checkpoint 1 + start data analysis project on a real public dataset", tag:"checkpoint"},
-  {d:7, t:"Publish data analysis notebook to public GitHub repo; write one-page README", tag:"publish"},
-  {d:8, t:"Vectors & dot products → code: cosine similarity in NumPy"},
-  {d:9, t:"Matrices & projections → code: how embeddings multiply"},
-  {d:10, t:"Probability: distributions, expectation → code: sampling + temperature connection"},
-  {d:11, t:"Statistics: mean/variance/correlation → code on Week 1 dataset"},
-  {d:12, t:"Supervised learning: train/test, overfitting → scikit-learn first model"},
-  {d:13, t:"Checkpoint 2 + unsupervised: k-means/PCA → code", tag:"checkpoint"},
-  {d:14, t:"Publish ML basics notebook; every math topic has its code example", tag:"publish"},
-  {d:15, t:"Perceptron → activation functions → code in NumPy"},
-  {d:16, t:"Backpropagation intuition → code tiny network, watch gradients"},
-  {d:17, t:"Loss & optimizers → code: SGD vs momentum on toy problem"},
-  {d:18, t:"Word embeddings: word2vec idea → vector arithmetic (king − man + woman)"},
-  {d:19, t:"Attention mechanism → annotated attention diagram + code"},
-  {d:20, t:"Checkpoint 3 + transformer architecture: tokens, layers, heads", tag:"checkpoint"},
-  {d:21, t:"Write/publish 'how an LLM works' breakdown (tiny transformer or annotated walkthrough)", tag:"publish"},
-  {d:22, t:"Gemini API: messages, tokens, context windows; API key setup"},
-  {d:23, t:"Temperature & sampling → experiment notebook comparing outputs"},
-  {d:24, t:"System prompts vs user instructions → experiment"},
-  {d:25, t:"Function calling → code a tool the model can call"},
-  {d:26, t:"Structured outputs (JSON mode / schemas) → code"},
-  {d:27, t:"Checkpoint 4 + context management: history, truncation", tag:"checkpoint"},
-  {d:28, t:"Build a small Gemini application (tool calling + structured output), publish", tag:"publish"},
-  {d:29, t:"Phase 1 buffer/revision day 1"},
-  {d:30, t:"Phase 1 buffer/revision day 2 + Day-30 gate check: LinkedIn refreshed + 5–10 Saudi-tech networking approaches", tag:"gate"},
-  // Phase 2
-  {d:31, t:"Embedding models: dimensions, similarity; embed text with Gemini; pgvector docs study"},
-  {d:32, t:"PostgreSQL + pgvector setup; store & query vectors"},
-  {d:33, t:"Semantic search prototype over chosen Saudi public business corpus"},
-  {d:34, t:"Evaluate search quality manually; note failure cases"},
-  {d:35, t:"Checkpoint 5 + publish search prototype notes", tag:"checkpoint"},
-  {d:36, t:"RAG architecture: chunking strategies study"},
-  {d:37, t:"Document loader for Saudi corpus"},
-  {d:38, t:"Implement chunk → embed → store pipeline (part 1)"},
-  {d:39, t:"Implement chunk → embed → store pipeline (part 2)"},
-  {d:40, t:"Retriever + answer-with-citations flow (part 1)"},
-  {d:41, t:"Retriever + answer-with-citations flow (part 2)"},
-  {d:42, t:"Checkpoint 6 + reranking study & integrate simple reranker", tag:"checkpoint"},
-  {d:43, t:"LangGraph fundamentals: nodes, edges"},
-  {d:44, t:"LangGraph fundamentals: state"},
-  {d:45, t:"Tool-calling agent loop"},
-  {d:46, t:"Read-only SQL tool (Saudi retail ERP schema set up)"},
-  {d:47, t:"Planning & multi-step execution (revenue/inventory/receivables queries, part 1)"},
-  {d:48, t:"Planning & multi-step execution (part 2)"},
-  {d:49, t:"Checkpoint 7 + demo: business question → agent → SQL → report", tag:"checkpoint"},
-  {d:50, t:"MCP integration: server"},
-  {d:51, t:"MCP integration: tools"},
-  {d:52, t:"Query validation + read-only enforcement"},
-  {d:53, t:"Permissions model"},
-  {d:54, t:"Human approval workflow for sensitive operations (part 1)"},
-  {d:55, t:"Human approval workflow (part 2)"},
-  {d:56, t:"FastAPI wrapper for Project 2"},
-  {d:57, t:"Dockerize Project 2"},
-  {d:58, t:"Deploy Project 2 demo (HF Spaces)"},
-  {d:59, t:"Day 60 gate: Project 1 public URL + upload + retrieval + citations + README finalized", tag:"gate"},
-  {d:60, t:"Checkpoint 8 — FIRST APPLICATIONS SENT; polish write-ups for both projects", tag:"checkpoint"},
-  // Phase 3
-  {d:61, t:"RAG evaluation: retrieval metrics"},
-  {d:62, t:"RAG evaluation: answer grading"},
-  {d:63, t:"Security: prompt injection"},
-  {d:64, t:"Security: auth basics; latency & cost optimization"},
-  {d:65, t:"Write AI architecture document for Project 1 (draft)"},
-  {d:66, t:"Publish AI architecture document for Project 1", tag:"publish"},
-  {d:67, t:"Checkpoint 9 + OpenAI API parity pass (function calling, structured outputs)", tag:"checkpoint"},
-  {d:68, t:"Harden Project 2: observability/logging"},
-  {d:69, t:"Harden Project 2: error handling"},
-  {d:70, t:"Harden Project 2: cost controls → deployed gate", tag:"gate"},
-  {d:71, t:"Deployment polish both projects (part 1)"},
-  {d:72, t:"Deployment polish both projects (part 2)"},
-  {d:73, t:"Docs for both projects"},
-  {d:74, t:"Checkpoint 10 + system design interview self-prep starts", tag:"checkpoint"},
-  {d:75, t:"Project 3: invent client brief (Saudi mid-size business)"},
-  {d:76, t:"Project 3: discovery questions"},
-  {d:77, t:"Project 3: requirements"},
-  {d:78, t:"Project 3: solution architecture document"},
-  {d:79, t:"Publish engagement document", tag:"publish"},
-  {d:80, t:"Rehearse talking through the engagement document"},
-  {d:81, t:"Checkpoint 11 + mock interview answers (recorded)", tag:"checkpoint"},
-  {d:82, t:"CV final pass — defensible claims only (part 1)"},
-  {d:83, t:"CV final pass — defensible claims only (part 2)"},
-  {d:84, t:"Portfolio page assembled"},
-  {d:85, t:"Application volume (calibration learnings applied, part 1)"},
-  {d:86, t:"Applications + interview prep drills"},
-  {d:87, t:"Interview prep drills"},
-  {d:88, t:"Interview prep drills + application follow-ups"},
-  {d:89, t:"Closing written review: what proved, what slipped"},
-  {d:90, t:"Checkpoint 13 — final gate review + checkpoint log completed", tag:"checkpoint"}
+  // ===== PHASE 1 =====
+  {d:1, t:"Set up repo, AI vs ML vs DL landscape overview; install NumPy/Pandas/Jupyter", hrs:4, tp:"AI/ML/DL landscape", ref:"GLOSSARY.md",
+    res:[R("roadmap.sh AI Engineer", "https://roadmap.sh/ai-engineer"), R("Compound AI Systems (BAIR)", "https://bair.berkeley.edu/blog/2024/02/18/compound-ai-systems/"), R("DataCamp track", "https://www.datacamp.com/tracks/associate-ai-engineer-for-developers")]},
+  {d:2, t:"NumPy fundamentals: arrays, dtypes, broadcasting, vectorization", hrs:4, tp:"Python data stack (NumPy/Pandas)",
+    res:[R("NumPy quickstart", "https://numpy.org/doc/stable/user/quickstart.html"), R("Python Data Science Handbook", "https://jakevdp.github.io/PythonDataScienceHandbook/")]},
+  {d:3, t:"NumPy practice: matrix ops, dot products, normalization", hrs:4, tp:"Python data stack (NumPy/Pandas)",
+    res:[R("100 NumPy exercises", "https://github.com/rougier/numpy-100"), R("DataCamp: NumPy cheat sheet", "https://www.datacamp.com/cheat-sheet/numpy-cheat-sheet-data-analysis-in-python")]},
+  {d:4, t:"Pandas fundamentals: Series, DataFrames, indexing, filtering", hrs:4, tp:"Python data stack (NumPy/Pandas)",
+    res:[R("Pandas intro tutorials", "https://pandas.pydata.org/docs/getting_started/intro_tutorials/index.html"), R("PDSH ch. 3", "https://jakevdp.github.io/PythonDataScienceHandbook/03.00-introduction-to-pandas.html")]},
+  {d:5, t:"Pandas practice: groupby, joins, missing data, cleaning", hrs:4, tp:"Python data stack (NumPy/Pandas)",
+    res:[R("Kaggle Learn: Pandas", "https://www.kaggle.com/learn/pandas"), R("Pandas cookbook", "https://pandas.pydata.org/docs/user_guide/cookbook.html")]},
+  {d:6, t:"Checkpoint 1 + start data analysis project on a real public dataset", hrs:3, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("DataCamp course: OpenAI API", "https://www.datacamp.com/courses/working-with-the-openai-api"), R("Kaggle datasets", "https://www.kaggle.com/datasets")]},
+  {d:7, t:"Publish data analysis notebook to public GitHub repo; write one-page README", hrs:4, tp:"Python data stack (NumPy/Pandas)", tag:"publish",
+    res:[R("Kaggle datasets", "https://www.kaggle.com/datasets"), R("GitHub README guide", "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes")]},
+
+  {d:8, t:"Vectors & dot products → code: cosine similarity in NumPy", hrs:4, tp:"Math for intuition", ref:"notes/cs329z/lecture02.md",
+    res:[R("3Blue1Brown Linear Algebra ep. 1–3", "https://www.3blue1brown.com/topics/linear-algebra"), CS(2)]},
+  {d:9, t:"Matrices & projections → code: how embeddings multiply", hrs:4, tp:"Math for intuition", ref:"notes/cs329z/lecture02.md",
+    res:[R("3Blue1Brown Linear Algebra ep. 4", "https://www.3blue1brown.com/topics/linear-algebra"), R("Attention Is All You Need", "https://arxiv.org/abs/1706.03762")]},
+  {d:10, t:"Probability: distributions, expectation → code: sampling + temperature connection", hrs:4, tp:"Math for intuition",
+    res:[R("Seeing Theory (Brown)", "https://seeing-theory.brown.edu/"), R("StatQuest: Probability", "https://www.youtube.com/@statquest")]},
+  {d:11, t:"Statistics: mean/variance/correlation → code on Week 1 dataset", hrs:4, tp:"Math for intuition",
+    res:[R("StatQuest: Statistics Fundamentals", "https://www.youtube.com/@statquest"), R("Khan Academy: Statistics", "https://www.khanacademy.org/math/statistics-probability")]},
+  {d:12, t:"Supervised learning: train/test, overfitting → scikit-learn first model", hrs:4, tp:"Classical ML",
+    res:[R("scikit-learn getting started", "https://scikit-learn.org/stable/getting_started.html"), R("StatQuest: ML playlist", "https://www.youtube.com/@statquest")]},
+  {d:13, t:"Checkpoint 2 + unsupervised: k-means/PCA → code", hrs:3, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("StatQuest: K-means", "https://www.youtube.com/@statquest"), R("StatQuest: PCA step-by-step", "https://www.youtube.com/@statquest")]},
+  {d:14, t:"Publish ML basics notebook; every math topic has its code example", hrs:4, tp:"Classical ML", tag:"publish",
+    res:[R("Kaggle Learn: Intro to ML", "https://www.kaggle.com/learn/intro-to-machine-learning")]},
+
+  {d:15, t:"Perceptron → activation functions → code in NumPy", hrs:4, tp:"Neural nets & transformers",
+    res:[R("3Blue1Brown Neural Networks ep. 1", "https://www.3blue1brown.com/topics/neural-networks"), R("Karpathy: micrograd", "https://github.com/karpathy/micrograd")]},
+  {d:16, t:"Backpropagation intuition → code tiny network, watch gradients", hrs:4, tp:"Neural nets & transformers",
+    res:[R("3Blue1Brown: Backpropagation", "https://www.3blue1brown.com/topics/neural-networks"), R("Karpathy: Zero to Hero", "https://karpathy.ai/zero-to-hero.html")]},
+  {d:17, t:"Loss & optimizers → code: SGD vs momentum on toy problem", hrs:4, tp:"Neural nets & transformers",
+    res:[R("Karpathy: Zero to Hero", "https://karpathy.ai/zero-to-hero.html"), R("ML-Coursera? No — Optimizers visualized", "https://www.deeplearning.ai/ai-notes/optimizers/")]},
+  {d:18, t:"Word embeddings: word2vec idea → vector arithmetic (king − man + woman)", hrs:4, tp:"Neural nets & transformers", ref:"notes/cs329z/lecture02.md",
+    res:[R("Illustrated Word2Vec", "https://jalammar.github.io/illustrated-word2vec/")]},
+  {d:19, t:"Attention mechanism → annotated attention diagram + code", hrs:4, tp:"Neural nets & transformers", ref:"notes/cs329z/lecture02.md",
+    res:[R("Illustrated Transformer", "https://jalammar.github.io/illustrated-transformer/"), R("Attention Is All You Need", "https://arxiv.org/abs/1706.03762")]},
+  {d:20, t:"Checkpoint 3 + transformer architecture: tokens, layers, heads", hrs:3, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("3Blue1Brown: Attention in transformers", "https://www.3blue1brown.com/topics/neural-networks"), CS(2)]},
+  {d:21, t:"Write/publish 'how an LLM works' breakdown (tiny transformer or annotated walkthrough)", hrs:4, tp:"Neural nets & transformers", tag:"publish",
+    res:[R("Karpathy: nanoGPT", "https://github.com/karpathy/nanoGPT"), R("Illustrated GPT-2", "https://jalammar.github.io/illustrated-gpt2/")]},
+
+  {d:22, t:"Gemini API: messages, tokens, context windows; API key setup", hrs:4, tp:"LLM APIs", ref:"notes/cs329z/lecture02.md",
+    res:[R("Gemini API docs", "https://ai.google.dev/gemini-api/docs"), R("Google AI Studio", "https://aistudio.google.com/")]},
+  {d:23, t:"Temperature & sampling → experiment notebook comparing outputs", hrs:4, tp:"LLM APIs",
+    res:[R("Gemini generation params", "https://ai.google.dev/gemini-api/docs/generation-parameters")]},
+  {d:24, t:"System prompts vs user instructions → experiment", hrs:4, tp:"LLM APIs",
+    res:[R("Gemini prompting strategies", "https://ai.google.dev/gemini-api/docs/prompting-strategies"), R("DataCamp: Prompt Engineering", "https://www.datacamp.com/courses/prompt-engineering-with-the-openai-api")]},
+  {d:25, t:"Function calling → code a tool the model can call", hrs:4, tp:"LLM APIs", ref:"notes/cs329z/lecture04.md",
+    res:[R("Gemini function calling", "https://ai.google.dev/gemini-api/docs/function-calling"), CS(4)]},
+  {d:26, t:"Structured outputs (JSON mode / schemas) → code", hrs:4, tp:"LLM APIs",
+    res:[R("Gemini structured output", "https://ai.google.dev/gemini-api/docs/structured-output"), R("DataCamp: Responses API", "https://www.datacamp.com/courses/working-with-the-openai-responses-api")]},
+  {d:27, t:"Checkpoint 4 + context management: history, truncation", hrs:3, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("Anthropic: Context engineering", "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents")]},
+  {d:28, t:"Build a small Gemini application (tool calling + structured output), publish", hrs:4, tp:"LLM APIs", tag:"publish",
+    res:[R("Gemini API cookbook", "https://github.com/google-gemini/cookbook"), R("Gradio quickstart", "https://www.gradio.app/guides/quickstart")]},
+
+  {d:29, t:"Phase 1 buffer/revision day 1", hrs:2, tp:"Gates & buffers", ref:"PLAN.md",
+    res:[R("PLAN.md", REPO + "PLAN.md")]},
+  {d:30, t:"Phase 1 buffer/revision day 2 + Day-30 gate check: LinkedIn refreshed + 5–10 Saudi-tech networking approaches", hrs:4, tp:"Gates & buffers", tag:"gate", ref:"PLAN.md",
+    res:[R("LinkedIn", "https://www.linkedin.com/jobs/"), R("SDAIA", "https://sdaia.gov.sa/")]},
+
+  // ===== PHASE 2 =====
+  {d:31, t:"Embedding models: dimensions, similarity; embed text with Gemini; pgvector docs study", hrs:4, tp:"Embeddings & vector search", ref:"notes/cs329z/lecture03.md",
+    res:[R("Gemini embeddings docs", "https://ai.google.dev/gemini-api/docs/embeddings"), CS(3), R("DataCamp: Embeddings", "https://www.datacamp.com/courses/introduction-to-embeddings-with-the-openai-api")]},
+  {d:32, t:"PostgreSQL + pgvector setup; store & query vectors", hrs:4, tp:"Embeddings & vector search",
+    res:[R("pgvector GitHub", "https://github.com/pgvector/pgvector"), R("Postgres tutorial", "https://www.postgresql.org/docs/current/tutorial.html")]},
+  {d:33, t:"Semantic search prototype over chosen Saudi public business corpus", hrs:4, tp:"Embeddings & vector search", ref:"notes/cs329z/lecture03.md",
+    res:[R("Dense Passage Retrieval", "https://arxiv.org/abs/2004.04906"), R("Hugging Face course", "https://huggingface.co/learn")]},
+  {d:34, t:"Evaluate search quality manually; note failure cases", hrs:4, tp:"Embeddings & vector search",
+    res:[R("Anthropic: Evals", "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents")]},
+  {d:35, t:"Checkpoint 5 + publish search prototype notes", hrs:3, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("DataCamp: Hugging Face", "https://www.datacamp.com/courses/working-with-hugging-face")]},
+
+  {d:36, t:"RAG architecture: chunking strategies study", hrs:4, tp:"RAG (Project 1)", ref:"notes/cs329z/lecture03.md",
+    res:[R("RAG paper (Lewis et al.)", "https://arxiv.org/abs/2005.11401"), R("Pinecone: chunking strategies", "https://www.pinecone.io/learn/chunking-strategies/"), CS(3)]},
+  {d:37, t:"Document loader for Saudi corpus", hrs:4, tp:"RAG (Project 1)",
+    res:[R("LangChain document loaders", "https://docs.langchain.com/oss/python/integrations/document_loaders"), R("pypdf", "https://pypdf.readthedocs.io/en/stable/")]},
+  {d:38, t:"Implement chunk → embed → store pipeline (part 1)", hrs:4, tp:"RAG (Project 1)",
+    res:[R("pgvector GitHub", "https://github.com/pgvector/pgvector"), R("ColBERT", "https://arxiv.org/abs/2004.12832")]},
+  {d:39, t:"Implement chunk → embed → store pipeline (part 2)", hrs:4, tp:"RAG (Project 1)",
+    res:[R("Gemini embeddings docs", "https://ai.google.dev/gemini-api/docs/embeddings")]},
+  {d:40, t:"Retriever + answer-with-citations flow (part 1)", hrs:4, tp:"RAG (Project 1)",
+    res:[R("LangGraph RAG tutorial", "https://langchain-ai.github.io/langgraph/tutorials/rag/langgraph_adaptive_rag/"), R("Grounding docs (Gemini)", "https://ai.google.dev/gemini-api/docs/grounding")]},
+  {d:41, t:"Retriever + answer-with-citations flow (part 2)", hrs:4, tp:"RAG (Project 1)",
+    res:[R("Anthropic: Building effective agents", "https://www.anthropic.com/engineering/building-effective-agents")]},
+  {d:42, t:"Checkpoint 6 + reranking study & integrate simple reranker", hrs:3, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("Cohere rerank overview", "https://docs.cohere.com/docs/rerank-overview"), CS(3)]},
+
+  {d:43, t:"LangGraph fundamentals: nodes, edges", hrs:4, tp:"Agents (Project 2)", ref:"notes/cs329z/lecture05.md",
+    res:[R("LangGraph overview", "https://docs.langchain.com/oss/python/langgraph/overview"), CS(5), R("DataCamp: LangChain", "https://www.datacamp.com/courses/developing-llm-applications-with-langchain")]},
+  {d:44, t:"LangGraph fundamentals: state", hrs:4, tp:"Agents (Project 2)",
+    res:[R("LangGraph: State concepts", "https://docs.langchain.com/oss/python/langgraph/graph-state")]},
+  {d:45, t:"Tool-calling agent loop", hrs:4, tp:"Agents (Project 2)", ref:"notes/cs329z/lecture04.md",
+    res:[R("ReAct paper", "https://arxiv.org/abs/2210.03629"), CS(4)]},
+  {d:46, t:"Read-only SQL tool (Saudi retail ERP schema set up)", hrs:4, tp:"Agents (Project 2)",
+    res:[R("Toolformer", "https://arxiv.org/abs/2302.04761"), R("SQLAlchemy ORM", "https://docs.sqlalchemy.org/en/20/tutorial/")]},
+  {d:47, t:"Planning & multi-step execution (revenue/inventory/receivables queries, part 1)", hrs:4, tp:"Agents (Project 2)", ref:"notes/cs329z/lecture06.md",
+    res:[R("Anthropic: Building effective agents", "https://www.anthropic.com/engineering/building-effective-agents"), CS(6)]},
+  {d:48, t:"Planning & multi-step execution (part 2)", hrs:4, tp:"Agents (Project 2)",
+    res:[R("Lil'Log: LLM Powered Autonomous Agents", "https://lilianweng.github.io/posts/2023-06-23-agent/")]},
+  {d:49, t:"Checkpoint 7 + demo: business question → agent → SQL → report", hrs:3, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("CS329Z HW1: harness", "https://github.com/cs329z/assignment1-harness")]},
+
+  {d:50, t:"MCP integration: server", hrs:4, tp:"MCP & hardening", ref:"notes/cs329z/lecture04.md",
+    res:[R("MCP specification", "https://modelcontextprotocol.io/docs/getting-started/intro"), R("DataCamp: MCP", "https://www.datacamp.com/courses/introduction-to-model-context-protocol"), CS(4)]},
+  {d:51, t:"MCP integration: tools", hrs:4, tp:"MCP & hardening",
+    res:[R("MCP Python SDK", "https://github.com/modelcontextprotocol/python-sdk")]},
+  {d:52, t:"Query validation + read-only enforcement", hrs:4, tp:"MCP & hardening", ref:"notes/cs329z/lecture17.md",
+    res:[R("OpenAI: Prompt injections", "https://openai.com/index/prompt-injections/")]},
+  {d:53, t:"Permissions model", hrs:4, tp:"MCP & hardening",
+    res:[R("Anthropic: Building effective agents (guardrails)", "https://www.anthropic.com/engineering/building-effective-agents")]},
+  {d:54, t:"Human approval workflow for sensitive operations (part 1)", hrs:4, tp:"MCP & hardening",
+    res:[R("LangGraph: Human-in-the-loop", "https://docs.langchain.com/oss/python/langgraph/human-in-the-loop")]},
+  {d:55, t:"Human approval workflow (part 2)", hrs:4, tp:"MCP & hardening",
+    res:[R("LangGraph: Human-in-the-loop", "https://docs.langchain.com/oss/python/langgraph/human-in-the-loop")]},
+  {d:56, t:"FastAPI wrapper for Project 2", hrs:4, tp:"MCP & hardening",
+    res:[R("FastAPI docs", "https://fastapi.tiangolo.com/")]},
+  {d:57, t:"Dockerize Project 2", hrs:4, tp:"MCP & hardening",
+    res:[R("Docker getting started", "https://docs.docker.com/get-started/"), R("FastAPI in containers", "https://fastapi.tiangolo.com/deployment/docker/")]},
+  {d:58, t:"Deploy Project 2 demo (HF Spaces)", hrs:4, tp:"MCP & hardening",
+    res:[R("HF Spaces docs", "https://huggingface.co/docs/hub/spaces"), R("Gradio quickstart", "https://www.gradio.app/guides/quickstart")]},
+  {d:59, t:"Day 60 gate: Project 1 public URL + upload + retrieval + citations + README finalized", hrs:4, tp:"Gates & buffers", tag:"gate", ref:"PLAN.md",
+    res:[R("PLAN.md", REPO + "PLAN.md")]},
+  {d:60, t:"Checkpoint 8 — FIRST APPLICATIONS SENT; polish write-ups for both projects", hrs:4, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("LinkedIn Jobs", "https://www.linkedin.com/jobs/")]},
+
+  // ===== PHASE 3 =====
+  {d:61, t:"RAG evaluation: retrieval metrics", hrs:4, tp:"Evaluation & security", ref:"notes/cs329z/lecture13.md",
+    res:[R("Anthropic: Demystifying evals", "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents"), CS(13), R("DataCamp: LLMOps Concepts", "https://www.datacamp.com/courses/llmops-concepts")]},
+  {d:62, t:"RAG evaluation: answer grading", hrs:4, tp:"Evaluation & security", ref:"notes/cs329z/lecture13.md",
+    res:[R("LLM-as-a-Judge (MT-Bench)", "https://arxiv.org/abs/2306.05685")]},
+  {d:63, t:"Security: prompt injection", hrs:4, tp:"Evaluation & security", ref:"notes/cs329z/lecture17.md",
+    res:[R("OpenAI: Prompt injections", "https://openai.com/index/prompt-injections/"), CS(17)]},
+  {d:64, t:"Security: auth basics; latency & cost optimization", hrs:4, tp:"Evaluation & security",
+    res:[R("FastAPI security", "https://fastapi.tiangolo.com/tutorial/security/"), R("Gemini pricing", "https://ai.google.dev/pricing")]},
+  {d:65, t:"Write AI architecture document for Project 1 (draft)", hrs:4, tp:"Evaluation & security",
+    res:[R("Chip Huyen: ML systems design", "https://huyenchip.com/machine-learning-systems-design/toc.html"), R("Google technical writing", "https://developers.google.com/tech-writing")]},
+  {d:66, t:"Publish AI architecture document for Project 1", hrs:4, tp:"Evaluation & security", tag:"publish",
+    res:[R("Google technical writing", "https://developers.google.com/tech-writing")]},
+  {d:67, t:"Checkpoint 9 + OpenAI API parity pass (function calling, structured outputs)", hrs:3, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("OpenAI function calling", "https://platform.openai.com/docs/guides/function-calling"), R("OpenAI structured outputs", "https://platform.openai.com/docs/guides/structured-outputs")]},
+
+  {d:68, t:"Harden Project 2: observability/logging", hrs:4, tp:"Production & LLMOps",
+    res:[R("LangSmith docs", "https://docs.smith.langchain.com/"), R("DataCamp: LLMOps Concepts", "https://www.datacamp.com/courses/llmops-concepts")]},
+  {d:69, t:"Harden Project 2: error handling", hrs:4, tp:"Production & LLMOps",
+    res:[R("The Twelve-Factor App", "https://12factor.net/")]},
+  {d:70, t:"Harden Project 2: cost controls → deployed gate", hrs:4, tp:"Production & LLMOps", tag:"gate",
+    res:[R("Gemini pricing", "https://ai.google.dev/pricing"), R("HF Spaces docs", "https://huggingface.co/docs/hub/spaces")]},
+  {d:71, t:"Deployment polish both projects (part 1)", hrs:4, tp:"Production & LLMOps",
+    res:[R("HF Spaces docs", "https://huggingface.co/docs/hub/spaces")]},
+  {d:72, t:"Deployment polish both projects (part 2)", hrs:4, tp:"Production & LLMOps",
+    res:[R("Docker getting started", "https://docs.docker.com/get-started/")]},
+  {d:73, t:"Docs for both projects", hrs:4, tp:"Production & LLMOps",
+    res:[R("Google technical writing", "https://developers.google.com/tech-writing")]},
+  {d:74, t:"Checkpoint 10 + system design interview self-prep starts", hrs:3, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("System Design Primer", "https://github.com/donnemartin/system-design-primer")]},
+
+  {d:75, t:"Project 3: invent client brief (Saudi mid-size business)", hrs:4, tp:"FDE field skills (Project 3)",
+    res:[R("roadmap.sh (FDE roadmap)", "https://roadmap.sh"), R("The Mom Test", "https://www.momtestbook.com/")]},
+  {d:76, t:"Project 3: discovery questions", hrs:4, tp:"FDE field skills (Project 3)",
+    res:[R("The Mom Test", "https://www.momtestbook.com/"), R("Anthropic: Building effective agents", "https://www.anthropic.com/engineering/building-effective-agents")]},
+  {d:77, t:"Project 3: requirements", hrs:4, tp:"FDE field skills (Project 3)",
+    res:[R("Google technical writing", "https://developers.google.com/tech-writing")]},
+  {d:78, t:"Project 3: solution architecture document", hrs:4, tp:"FDE field skills (Project 3)",
+    res:[R("Chip Huyen: ML systems design", "https://huyenchip.com/machine-learning-systems-design/toc.html")]},
+  {d:79, t:"Publish engagement document", hrs:4, tp:"FDE field skills (Project 3)", tag:"publish",
+    res:[R("Google technical writing", "https://developers.google.com/tech-writing")]},
+  {d:80, t:"Rehearse talking through the engagement document", hrs:4, tp:"FDE field skills (Project 3)",
+    res:[R("Pramp (mock interviews)", "https://www.pramp.com/")]},
+  {d:81, t:"Checkpoint 11 + mock interview answers (recorded)", hrs:3, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("Pramp (mock interviews)", "https://www.pramp.com/")]},
+
+  {d:82, t:"CV final pass — defensible claims only (part 1)", hrs:4, tp:"Portfolio & applications", ref:"PLAN.md",
+    res:[R("PLAN.md (CV rule)", REPO + "PLAN.md")]},
+  {d:83, t:"CV final pass — defensible claims only (part 2)", hrs:4, tp:"Portfolio & applications",
+    res:[R("GitHub profile README", "https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme")]},
+  {d:84, t:"Portfolio page assembled", hrs:4, tp:"Portfolio & applications", tag:"publish",
+    res:[R("GitHub Pages", "https://pages.github.com/")]},
+  {d:85, t:"Application volume (calibration learnings applied, part 1)", hrs:4, tp:"Portfolio & applications",
+    res:[R("LinkedIn Jobs", "https://www.linkedin.com/jobs/")]},
+  {d:86, t:"Applications + interview prep drills", hrs:4, tp:"Portfolio & applications",
+    res:[R("System Design Primer", "https://github.com/donnemartin/system-design-primer")]},
+  {d:87, t:"Interview prep drills", hrs:4, tp:"Portfolio & applications",
+    res:[R("NeetCode 150 (DSA gate)", "https://neetcode.io/roadmap"), R("Pramp (mock interviews)", "https://www.pramp.com/")]},
+  {d:88, t:"Interview prep drills + application follow-ups", hrs:4, tp:"Portfolio & applications",
+    res:[R("NeetCode 150 (DSA gate)", "https://neetcode.io/roadmap")]},
+  {d:89, t:"Closing written review: what proved, what slipped", hrs:4, tp:"Portfolio & applications", ref:"TRACKER.md",
+    res:[R("TRACKER.md", REPO + "TRACKER.md")]},
+  {d:90, t:"Checkpoint 13 — final gate review + checkpoint log completed", hrs:4, tp:"Checkpoint & review", tag:"checkpoint", ref:"TRACKER.md",
+    res:[R("PLAN.md", REPO + "PLAN.md")]}
 ];
 
 const PHASES = [
@@ -288,6 +465,18 @@ const PHASES = [
     {w:"Week 11", focus:"Project 3 — FDE engagement document (Days 75–81)"},
     {w:"Week 12–13", focus:"Portfolio + applications (Days 82–90)"}
   ]}
+];
+
+const MONTHS = [
+  {m:1, name:"Month 1", dates:"Nov 8 – Dec 7, 2026", range:[1,30], phase:"Phase 1 — Fundamentals rebuild",
+   goal:"Full rebuild: data stack, math-for-intuition, neural nets, transformers, LLM APIs. CS329Z lectures L1–L4 run in parallel as morning input.",
+   out:"Outcome: data-analysis notebook + ML notebook + LLM breakdown published, Gemini mini-app live. Gate: LinkedIn refreshed + 5–10 Saudi-tech networking approaches."},
+  {m:2, name:"Month 2", dates:"Dec 6 – Jan 6, 2027", range:[29,60], phase:"Phase 2 — Applied AI Engineering",
+   goal:"Build the two portfolio projects: Enterprise RAG (pgvector + Gemini) and Agentic ERP assistant (LangGraph + MCP), deployed and hardened.",
+   out:"Outcome: Project 1 public URL with citations; Project 2 hardened demo with approval workflow. Gate: FIRST APPLICATIONS SENT."},
+  {m:3, name:"Month 3", dates:"Jan 7 – Feb 5, 2027", range:[61,90], phase:"Phase 3 — Production + FDE + Applications",
+   goal:"Production hardening, evaluation & security, the FDE engagement document (Project 3), CV final pass, and application/interview volume.",
+   out:"Outcome: architecture doc + engagement doc published, portfolio live. Gate: final review — what proved, what slipped."}
 ];
 
 const LS_KEY = "fde90day-progress-v1";
@@ -312,14 +501,6 @@ function storageOk() {
   catch (e) { return false; }
 }
 
-function fmtDate(d) {
-  const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  return days[d.getDay()] + " " + months[d.getMonth()] + " " + d.getDate();
-}
-function dateForDay(n) { const d = new Date(START); d.setDate(d.getDate() + (n - 1)); return d; }
-function isWeekend(n) { const day = dateForDay(n).getDay(); return day === 5 || day === 6; } // Fri/Sat
-
 function save() {
   const payload = JSON.stringify(state);
   let ok = true;
@@ -334,10 +515,52 @@ function save() {
     : '<strong style="color:var(--red)">Storage blocked — use Export!</strong>';
   refresh();
 }
-function doneCount() { return Object.values(state).filter(v => v === true).length; }
+function doneCount() {
+  let c = 0;
+  for (let n = 1; n <= 90; n++) if (state[n] === true) c++;
+  return c;
+}
+function doneHours() {
+  let h = 0;
+  for (const it of DAYS) if (state[it.d] === true) h += it.hrs;
+  return h;
+}
+function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+function fmtDate(d) {
+  const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return days[d.getDay()] + " " + months[d.getMonth()] + " " + d.getDate();
+}
+function dateForDay(n) { const d = new Date(START); d.setDate(d.getDate() + (n - 1)); return d; }
+
+function buildMonths() {
+  const grid = document.getElementById("month-grid");
+  grid.innerHTML = "";
+  MONTHS.forEach(mo => {
+    let h = 0, done = 0, doneH = 0, n = 0;
+    for (let i = mo.range[0]; i <= mo.range[1]; i++) {
+      const it = DAYS[i - 1];
+      if (!it) continue;
+      n++; h += it.hrs;
+      if (state[i] === true) { done++; doneH += it.hrs; }
+    }
+    const card = document.createElement("div");
+    card.className = "month-card";
+    card.innerHTML =
+      '<h5><span>' + mo.name + '</span><span class="mhrs">~' + h + 'h</span></h5>' +
+      '<div class="mdates">' + mo.dates + ' · ' + mo.phase + '</div>' +
+      '<div class="mgoal">' + mo.goal + '</div>' +
+      '<div class="mout">' + mo.out + '</div>' +
+      '<div class="bar"><div id="m' + mo.m + '-bar"></div></div>' +
+      '<div class="mstat" id="m' + mo.m + '-stat">' + done + '/' + n + ' days · ' + doneH + '/' + h + 'h</div>';
+    grid.appendChild(card);
+  });
+}
 
 function buildPlan() {
   const root = document.getElementById("plan");
+  let weekIndex = 0;
   PHASES.forEach(phase => {
     const h2 = document.createElement("h2");
     h2.className = "phase-title";
@@ -345,27 +568,48 @@ function buildPlan() {
     root.appendChild(h2);
 
     phase.weeks.forEach(week => {
+      weekIndex++;
+      const mo = weekIndex <= 4 ? 1 : weekIndex <= 8 ? 2 : 3;
       const card = document.createElement("div");
       card.className = "week-card";
+      const m = week.focus.match(/Days (\d+)–(\d+)/);
+      const a = m ? +m[1] : 0, b = m ? +m[2] : 0;
+      let wh = 0;
+      for (let n = a; n <= b; n++) if (DAYS[n - 1]) wh += DAYS[n - 1].hrs;
       const h4 = document.createElement("h4");
-      h4.textContent = week.w;
+      h4.innerHTML = '<span>' + week.w + '<span class="mbadge">Month ' + mo + '</span></span><span class="whrs">' + wh + 'h this week</span>';
       const focus = document.createElement("div");
       focus.className = "week-focus";
       focus.textContent = week.focus;
       card.appendChild(h4); card.appendChild(focus);
 
-      const [a, b] = week.focus.match(/Days (\d+)–(\d+)/) ? week.focus.match(/Days (\d+)–(\d+)/).slice(1).map(Number) : [0, 0];
       for (let n = a; n <= b; n++) {
         const item = DAYS[n - 1];
         if (!item) continue;
         const dt = dateForDay(n);
-        const row = document.createElement("label");
+        const row = document.createElement("div");
         row.className = "day";
         row.id = "day-" + n;
-        const dlabel = '<span class="dlabel">Day ' + n + '<span class="date">' + fmtDate(dt) + (isWeekend(n) ? " · " + (dt.getDay() === 5 ? "checkpoint day" : "light day") : "") + '</span></span>';
+
         const tag = item.tag ? '<span class="tag ' + item.tag + '">' + item.tag + '</span>' : "";
-        row.innerHTML = '<input type="checkbox" data-day="' + n + '" ' + (state[n] ? "checked" : "") + '>' +
-                        dlabel + '<span class="dtext">' + item.t + tag + '</span>';
+        const hrs = '<span class="hrs" title="' + item.tp + '">' + item.hrs + 'h</span>';
+        const ref = item.ref ? '<a class="topic-link" href="' + REPO + item.ref + '" target="_blank" title="Open topic file in repo">' + item.ref.split("/").pop() + '</a>' : "";
+        const resHtml = item.res && item.res.length
+          ? '<div class="res-list">Resources: ' + item.res.map(r => '<a href="' + r.url + '" target="_blank">' + r.label + '</a>').join("") + '</div>'
+          : "";
+        const hasNote = state["note-" + n] ? " has-note" : "";
+        const noteBtn = '<button class="note-btn' + hasNote + '" onclick="toggleNote(' + n + ')">' + (state["note-" + n] ? "note ✓" : "+ note") + '</button>';
+        const noteBox = '<div class="note-box" id="notebox-' + n + '"><textarea placeholder="Your notes for Day ' + n + ' — blockers, wins, ideas, what to revisit…" oninput="saveNote(' + n + ', this.value)">' + esc(state["note-" + n] || "") + '</textarea></div>';
+
+        row.innerHTML =
+          '<div class="day-top">' +
+            '<input type="checkbox" data-day="' + n + '" ' + (state[n] === true ? "checked" : "") + '>' +
+            '<span class="dlabel">Day ' + n + '<span class="date">' + fmtDate(dt) + '</span></span>' +
+            '<div class="dbody">' +
+              '<span class="dtext">' + item.t + tag + hrs + ref + noteBtn + '</span>' +
+              resHtml + noteBox +
+            '</div>' +
+          '</div>';
         row.querySelector("input").addEventListener("change", function () {
           state[n] = this.checked;
           if (!this.checked) delete state[n];
@@ -377,7 +621,52 @@ function buildPlan() {
       root.appendChild(card);
     });
   });
+  buildMonths();
+  buildHoursTable();
   refresh();
+}
+
+function toggleNote(n) {
+  const box = document.getElementById("notebox-" + n);
+  const btn = box.previousElementSibling; // not reliable; find button inside row
+  const row = document.getElementById("day-" + n);
+  const b = row.querySelector(".note-btn");
+  const open = box.classList.toggle("open");
+  if (open) box.querySelector("textarea").focus();
+  else if (!state["note-" + n]) b.classList.remove("has-note");
+}
+function saveNote(n, val) {
+  if (val.trim()) { state["note-" + n] = val; document.querySelector("#day-" + n + " .note-btn").classList.add("has-note"); }
+  else { delete state["note-" + n]; document.querySelector("#day-" + n + " .note-btn").classList.remove("has-note"); }
+  save();
+}
+
+function buildHoursTable() {
+  const byTopic = {};
+  DAYS.forEach(it => {
+    if (!byTopic[it.tp]) byTopic[it.tp] = { h: 0, done: 0, days: [] };
+    byTopic[it.tp].h += it.hrs;
+    byTopic[it.tp].days.push(it.d);
+    if (state[it.d] === true) byTopic[it.tp].done += it.hrs;
+  });
+  const tb = document.querySelector("#hours-table tbody");
+  tb.innerHTML = "";
+  Object.keys(byTopic).sort((x, y) => byTopic[y].h - byTopic[x].h).forEach(tp => {
+    const t = byTopic[tp];
+    const tr = document.createElement("tr");
+    tr.innerHTML = '<td>' + tp + '</td><td style="color:var(--muted)">D' + t.days[0] + '–' + t.days[t.days.length - 1] + '</td>' +
+      '<td class="num">' + t.h + 'h</td><td class="num" style="color:var(--green)">' + t.done + 'h</td>';
+    tb.appendChild(tr);
+  });
+  const total = DAYS.reduce((s, it) => s + it.hrs, 0);
+  const tr = document.createElement("tr");
+  tr.innerHTML = '<td style="font-weight:700">Total</td><td></td><td class="num" style="font-weight:700">' + total + 'h</td><td class="num" style="font-weight:700;color:var(--green)">' + doneHours() + 'h</td>';
+  tb.appendChild(tr);
+}
+
+function togglePanel(id) {
+  const p = document.getElementById(id);
+  p.style.display = p.style.display === "none" ? "block" : "none";
 }
 
 function refresh() {
@@ -402,38 +691,43 @@ function refresh() {
   const pct = Math.round(done / total * 100);
   document.getElementById("pct").textContent = pct;
   document.getElementById("overall-bar").style.width = pct + "%";
+  document.getElementById("hours-done").textContent = doneHours();
+  document.getElementById("hours-total").textContent = DAYS.reduce((s, it) => s + it.hrs, 0);
   PHASES.forEach((p, i) => {
     const [a, b] = p.range;
     let c = 0;
-    for (let n = a; n <= b; n++) if (state[n]) c++;
+    for (let n = a; n <= b; n++) if (state[n] === true) c++;
     document.getElementById("p" + (i + 1) + "-label").textContent = c + "/" + (b - a + 1);
     document.getElementById("p" + (i + 1) + "-bar").style.width = (c / (b - a + 1) * 100) + "%";
   });
-  // streak: consecutive done days ending at latest done day
   let streak = 0;
-  for (let n = total; n >= 1; n--) {
-    if (state[n]) streak++;
-    else if (streak > 0 || Object.keys(state).length) {
-      // only count if this is the last done day going backwards
-      if (streak > 0) break;
-    }
-  }
-  // simpler: count backwards from the highest done day
-  streak = 0;
   let highest = 0;
-  for (let n = 1; n <= total; n++) if (state[n]) highest = n;
-  for (let n = highest; n >= 1; n--) { if (state[n]) streak++; else break; }
+  for (let n = 1; n <= 90; n++) if (state[n] === true) highest = n;
+  for (let n = highest; n >= 1; n--) { if (state[n] === true) streak++; else break; }
   document.getElementById("streak").textContent = streak;
 
-  // today highlight
+  MONTHS.forEach(mo => {
+    let done = 0, n = 0, doneH = 0;
+    for (let i = mo.range[0]; i <= mo.range[1]; i++) {
+      const it = DAYS[i - 1];
+      if (!it) continue;
+      n++;
+      if (state[i] === true) { done++; doneH += it.hrs; }
+    }
+    const bar = document.getElementById("m" + mo.m + "-bar");
+    const stat = document.getElementById("m" + mo.m + "-stat");
+    if (bar) bar.style.width = (done / n * 100) + "%";
+    if (stat) stat.textContent = done + "/" + n + " days · " + doneH + "/" + Math.round(DAYS.slice(mo.range[0] - 1, mo.range[1]).reduce((s, it) => s + it.hrs, 0)) + "h";
+  });
+
   const now = new Date(); now.setHours(0,0,0,0);
   const todayN = Math.floor((now - START) / 86400000) + 1;
-  if (todayN >= 1 && todayN <= total) {
+  if (todayN >= 1 && todayN <= 90) {
     document.getElementById("today-label").textContent = fmtDate(now);
     document.getElementById("today-day").textContent = "Day " + todayN + " of 90";
     DAYS.forEach(it => {
       const el = document.getElementById("day-" + it.d);
-      if (el) { el.classList.toggle("is-today", it.d === todayN); el.classList.toggle("done", !!state[it.d]); }
+      if (el) { el.classList.toggle("is-today", it.d === todayN); el.classList.toggle("done", state[it.d] === true); }
     });
   } else {
     document.getElementById("today-label").textContent = fmtDate(now);
@@ -465,14 +759,14 @@ function importProgress(e) {
       state = JSON.parse(r.result);
       localStorage.setItem(LS_KEY, JSON.stringify(state));
       localStorage.setItem(LS_BACKUP, JSON.stringify(state));
-      localStorage.setItem(LS_META, JSON.stringify({ at: Date.now(), count: Object.values(state).filter(v => v === true).length }));
+      localStorage.setItem(LS_META, JSON.stringify({ at: Date.now(), count: doneCount() }));
       location.reload();
     } catch { alert("Invalid progress file."); }
   };
   r.readAsText(f);
 }
 function resetProgress() {
-  if (confirm("Reset ALL checked days? Export first if you want a backup.")) {
+  if (confirm("Reset ALL checked days AND notes? Export first if you want a backup.")) {
     state = {};
     localStorage.removeItem(LS_KEY);
     localStorage.removeItem(LS_BACKUP);
